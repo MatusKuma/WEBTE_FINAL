@@ -39,6 +39,22 @@
         
         $timestamp = date("Y-m-d H:i:s");
 
+        do {
+           // vygenerovanie unikatneho 5 miestneho kodu
+            $code = randString();
+    
+            // overujeme, ze ci kod sa uz nenachadza v databaze
+            $stmt1 = $db->prepare("SELECT COUNT(*) FROM questions_open WHERE code = ?");
+            $stmt1->execute([$code]);
+            $count1 = $stmt1->fetchColumn();
+        
+            $stmt2 = $db->prepare("SELECT COUNT(*) FROM questions_options WHERE code = ?");
+            $stmt2->execute([$code]);
+            $count2 = $stmt2->fetchColumn();
+        
+            // ak sa kod nachadza v nasich DB pre otazky, tak musime ho pregenerovat
+        } while ($count1 > 0 || $count2 > 0);
+
         // Check which option is selected
         if ($_POST['option'] == 'option1') {
             error_reporting(E_ALL);
@@ -59,8 +75,8 @@
             $answers_string = implode(',', $answers);
             // Insert data into your database
             try {
-                $stmt = $db->prepare("INSERT INTO questions_options (title, correct_answer, option_1, option_2, option_3, option_4, subject, timestamp, creator_id, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)");
-                $stmt->execute([$title, $correct_answer, $answers[0], $answers[1], $answers[2], $answers[3], $subject, $timestamp, $creator_id]);
+                $stmt = $db->prepare("INSERT INTO questions_options (title, correct_answer, option_1, option_2, option_3, option_4, subject, timestamp, creator_id, isActive, code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)");
+                $stmt->execute([$title, $correct_answer, $answers[0], $answers[1], $answers[2], $answers[3], $subject, $timestamp, $creator_id, $code]);
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();
             }
@@ -69,12 +85,25 @@
             $singleAnswer = $_POST['singleAnswer'];
             // Insert data into your database
             try {
-                $stmt  = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$creator_id, $timestamp, '1', $title, $subject]);
+                $stmt  = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject, code) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$creator_id, $timestamp, '1', $title, $subject, $code]);
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();
             }
         }
+    }
+
+    // na generovanie random stringov 5 miestnych
+    function randString() {
+        // z coho generujeme, vieme upravit do buducna
+        $char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        $char = str_shuffle($char);
+        $rand = '';
+        $l = strlen($char) - 1;
+        for($i = 0; $i < 5; $i++) {
+            $rand .= $char[mt_rand(0, $l)];
+        }
+        return $rand;
     }
 
 ?>
@@ -110,31 +139,35 @@
 
 <div class="form-wrapper">
 <form id="myForm"  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-<input type="radio" name="option" id="option1" value="option1" checked>
-<label for="option1">Otázka s výberom</label>
-<input type="radio" name="option" id="option2" value="option2">
-<label for="option2">Otvorená otázka</label><br><br>
 
-  <label for="title">Title:</label><br>
-  <input type="text" id="title" name="title" required><br>
+    <input type="radio" name="option" id="option1" value="option1" <?php if(!isset($_POST['option']) || $_POST['option'] === 'option1') echo 'checked'; ?>>
+    <label for="option1">Otázka s výberom</label>
 
-  <div id="answers" class="hidden">
-    <label>Answers:</label><br>
-    <input type="text" name="answer1" placeholder="Answer 1">
-    <input type="checkbox" name="correct1"> Correct<br>
-    <input type="text" name="answer2" placeholder="Answer 2">
-    <input type="checkbox" name="correct2"> Correct<br>
-    <input type="text" name="answer3" placeholder="Answer 3">
-    <input type="checkbox" name="correct3"> Correct<br>
-    <input type="text" name="answer4" placeholder="Answer 4">
-    <input type="checkbox" name="correct4"> Correct<br><br>
-  </div>
+    <input type="radio" name="option" id="option2" value="option2" <?php if(isset($_POST['option']) && $_POST['option'] === 'option2') echo 'checked'; ?>>
+    <label for="option2">Otvorená otázka</label><br><br>
 
 
-  <label for="subject">Subject:</label><br>
-  <input type="text" id="subject" name="subject" required><br><br>
 
-  <input type="submit" value="Submit">
+
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" required><br>
+
+    <div id="answers" class="hidden">
+        <label>Answers:</label><br>
+        <input type="text" name="answer1" placeholder="Answer 1">
+        <input type="checkbox" name="correct1"> Correct<br>
+        <input type="text" name="answer2" placeholder="Answer 2">
+        <input type="checkbox" name="correct2"> Correct<br>
+        <input type="text" name="answer3" placeholder="Answer 3">
+        <input type="checkbox" name="correct3"> Correct<br>
+        <input type="text" name="answer4" placeholder="Answer 4">
+        <input type="checkbox" name="correct4"> Correct<br><br>
+    </div>
+
+    <label for="subject">Subject:</label><br>
+    <input type="text" id="subject" name="subject" required><br><br>
+
+    <input type="submit" value="Submit">
 </form>
 
 </div>
