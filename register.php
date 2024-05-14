@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include "../.configFinal.php";
 
     function checkEmpty($field){
@@ -91,9 +92,10 @@
             $stmt->bindParam(":username", $username, PDO::PARAM_STR);
             $stmt->bindParam(":password", $hashed_password, PDO::PARAM_STR);
             if (!$stmt->execute()) {
-                echo "Something went wrong";
+                $_SESSION["toast_error"] = "Sorry, something went wrong.";
             } else{
                 unset($stmt);
+                $_SESSION["toast_success"] = "You have been successfully registered";
                 header("Location: login.php");
             }
         }
@@ -111,6 +113,7 @@
     <title>Register Form</title>
     <link rel="stylesheet" href="formsheet.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 <body>
     <div class="navigation_bar">
@@ -144,5 +147,26 @@
             </form>
         </div>
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-right",     // tu sa meni pozicia toastr
+        };
+
+        <?php if(isset($_SESSION["toast_success"])): ?>
+            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+
+            <?php unset($_SESSION["toast_success"]); ?>
+        <?php endif; ?>
+
+        <?php if(isset($_SESSION["toast_error"])): ?>
+            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+
+            <?php unset($_SESSION["toast_error"]); ?>
+        <?php endif; ?>
+
+        
+    </script>
 </body>
 </html>
