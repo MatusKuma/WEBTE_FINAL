@@ -1,7 +1,5 @@
 <?php 
     session_start();
-    echo $_SESSION['admin'] ? 'Admin is true' : 'Admin is false';
-
 
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
         header("Location: index.php");
@@ -23,7 +21,8 @@
     <div class="navigation_bar">
         <h2>HOME</h2>
         <div class="navbar">
-            <a href="add_question_user.php">Pridaj otázku</a>
+            <a href="find_question.php">Find question</a>
+            <a href="add_question_user.php">Add question</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2> 
         </div>
