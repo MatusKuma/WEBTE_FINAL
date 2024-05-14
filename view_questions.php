@@ -1,3 +1,14 @@
+<?php
+include "../.configFinal.php"; // Include your database connection setup
+            session_start();
+
+            // Check if user is logged in and a user ID is present in URL
+            if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_GET['user_id'])) {
+                header("Location: index.php.php");
+                exit;
+            }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,20 +33,13 @@
     <table id="questionTableOpen" class="display">
         <thead>
             <tr>
-                <th>Question Title</th>
-                <th>Date Created</th>
+            <th>Question Title</th>
+            <th>Date Created</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            include "../.configFinal.php"; // Include your database connection setup
-            session_start();
-
-            // Check if user is logged in and a user ID is present in URL
-            if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_GET['user_id'])) {
-                header("Location: index.php.php");
-                exit;
-            }
+    
 
             $user_id = $_GET['user_id'];
             $stmt = $db->prepare("SELECT * FROM questions_open WHERE creator_id = ?");
@@ -49,7 +53,7 @@
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='2'>No questions found for this user.</td></tr>";
+                echo "<tr><td colspan='2'>No questions found for this user.</td><td></td></tr>";
             }
             ?>
         </tbody>
@@ -58,26 +62,18 @@
     <table id="questionTableOption" class="display">
 
         <thead>
-            <tr>
-                <th>Question Title</th>
-                <th>Date Created</th>
-                <th>Option 1</th>
-                <th>Option 2</th>
-                <th>Option 3</th>
-                <th>Option 4</th>
-                <th>Correct Options</th>
+        <tr>
+            <th>Question Title</th>
+            <th>Date Created</th>
+            <th>Option 1</th>
+            <th>Option 2</th>
+            <th>Option 3</th>
+            <th>Option 4</th>
+            <th>Correct Options</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            include "../.configFinal.php"; // Include your database connection setup
-            session_start();
-
-            // Check if user is logged in and a user ID is present in URL
-            if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_GET['user_id'])) {
-                header("Location: index.php.php");
-                exit;
-            }
 
             $user_id = $_GET['user_id'];
             $stmt = $db->prepare("SELECT * FROM questions_options WHERE creator_id = ?");
@@ -101,13 +97,13 @@
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='2'>No questions found for this user.</td></tr>";
+                echo "<tr><td colspan='2'>No questions found for this user.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>
     </table>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script>
 
         $(document).ready(function () {

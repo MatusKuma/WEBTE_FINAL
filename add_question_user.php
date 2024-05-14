@@ -79,7 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             try {
                 $stmt = $db->prepare("INSERT INTO questions_options (title,correct_answer, option_1, option_2, option_3, option_4, subject, timestamp, creator_id, isActive, code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)");
                 $stmt->execute([$title,$correct_answer, $answers[0], $answers[1], $answers[2], $answers[3], $subject, $timestamp, $creator_id, $code]);
-                $_SESSION["toast_success"] = "Your question has been created.";
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();
             }
@@ -94,7 +93,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $stmt = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject, code) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$creator_id, $timestamp, '1', $title, $subject, $code]);
-            $_SESSION["toast_success"] = "Your question has been created.";
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -120,7 +118,6 @@ function randString()
 <head>
     <title>WEBTE FINAL</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
         .hidden {
             display: none;
@@ -146,6 +143,7 @@ function randString()
     <div class="navigation_bar">
         <h2>HOME</h2>
         <div class="navbar">
+            <a href="find_question.php">Find question</a>
             <a href="add_question_user.php">Pridaj otázku</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
@@ -181,10 +179,6 @@ function randString()
             <div id="error-message"><?php echo $error; ?></div>
         </form>
     </div>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             updateFormVisibility();
@@ -233,25 +227,7 @@ function randString()
         }
 
 
-        toastr.options = {
-            "positionClass": "toast-top-right",     // tu sa meni pozicia toastr
-        };
-
-        <?php if(isset($_SESSION["toast_success"])): ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
-
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
-
-        <?php if(isset($_SESSION["toast_error"])): ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
-
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
-    
     </script>
-
-
 </body>
 
 </html>

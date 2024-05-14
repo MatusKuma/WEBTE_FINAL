@@ -1,3 +1,5 @@
+
+
 function validateIsEmpty(message, inputID, errorOutputID){
     let inputField = document.getElementById(inputID);
 
