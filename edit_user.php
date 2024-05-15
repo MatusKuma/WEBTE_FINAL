@@ -47,6 +47,7 @@ $isAdmin = $user['isAdmin'];
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="navigation_bar">

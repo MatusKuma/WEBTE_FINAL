@@ -146,6 +146,7 @@ function randString()
     <div class="navigation_bar">
         <h2>HOME</h2>
         <div class="navbar">
+            <a href="find_question.php">Find question</a>
             <a href="add_question_user.php">Pridaj otázku</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
@@ -248,10 +249,8 @@ function randString()
 
             <?php unset($_SESSION["toast_error"]); ?>
         <?php endif; ?>
-    
+
     </script>
-
-
 </body>
 
 </html>
