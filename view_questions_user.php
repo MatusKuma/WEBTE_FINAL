@@ -15,12 +15,14 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>View Questions</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" />
 </head>
+
 <body>
     <div class="navigation_bar">
         <div class="navbar">
@@ -38,6 +40,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 <th>Question Title</th>
                 <th>Date Created</th>
                 <th>Active</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -52,10 +56,12 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                     echo "<td><input type='checkbox' class='isActiveCheckbox' data-id='" . $row['id'] . "' " . ($row['isActive'] ? 'checked' : '') . "></td>";
+                    echo "<td><a href='edit_question_open.php?id=" . $row['id'] . "'>Edit</a></td>";
+                    echo "<td><a href='#' class='delete-link' data-id='" . $row['id'] . "' data-type='open'>Delete</a></td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No Open questions found</td></tr>";
+                echo "<tr><td colspan='5'>No Open questions found</td></tr>";
             }
             ?>
         </tbody>
@@ -72,6 +78,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 <th>Option 4</th>
                 <th>Correct Options</th>
                 <th>Active</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -95,10 +103,12 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     }
                     echo "</td>";
                     echo "<td><input type='checkbox' class='isActiveCheckbox' data-id='" . $row['id'] . "' " . ($row['isActive'] ? 'checked' : '') . "></td>";
+                    echo "<td><a href='edit_question_option.php?id=" . $row['id'] . "'>Edit</a></td>";
+                    echo "<td><a href='#' class='delete-link' data-id='" . $row['id'] . "' data-type='option'>Delete</a></td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='8'>No questions with options found</td></tr>";
+                echo "<tr><td colspan='10'>No questions with options found</td></tr>";
             }
             ?>
         </tbody>
@@ -132,6 +142,30 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 }
             });
         });
+
+        $(document).on('click', '.delete-link', function (e) {
+            e.preventDefault();
+
+            var id = $(this).data('id');
+            var type = $(this).data('type');
+
+            $.ajax({
+                url: 'delete_question.php',
+                type: 'POST',
+                data: {
+                    id: id,
+                    type: type
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error deleting question:', error);
+                }
+            });
+
+        });
     </script>
 </body>
+
 </html>

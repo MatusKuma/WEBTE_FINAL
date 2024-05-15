@@ -1,12 +1,16 @@
 <?php
 include "../.configFinal.php"; // Include your database connection setup
-            session_start();
-
-            // Check if user is logged in and a user ID is present in URL
-            if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_GET['user_id'])) {
-                header("Location: index.php.php");
-                exit;
-            }
+session_start();
+session_start();
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
+    header("Location: index.php");
+    exit;
+} else {
+    if (!isset($_SESSION['admin']) && $_SESSION['admin'] === false) {
+        header("Location: logged_in.php");
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +24,7 @@ include "../.configFinal.php"; // Include your database connection setup
 </head>
 
 <body>
-<div class="navigation_bar">
+    <div class="navigation_bar">
         <div class="navbar">
             <a href="add_user.php">Add User</a>
             <a href="admin.php">Home</a>
@@ -33,13 +37,13 @@ include "../.configFinal.php"; // Include your database connection setup
     <table id="questionTableOpen" class="display">
         <thead>
             <tr>
-            <th>Question Title</th>
-            <th>Date Created</th>
+                <th>Question Title</th>
+                <th>Date Created</th>
             </tr>
         </thead>
         <tbody>
             <?php
-    
+
 
             $user_id = $_GET['user_id'];
             $stmt = $db->prepare("SELECT * FROM questions_open WHERE creator_id = ?");
@@ -62,14 +66,14 @@ include "../.configFinal.php"; // Include your database connection setup
     <table id="questionTableOption" class="display">
 
         <thead>
-        <tr>
-            <th>Question Title</th>
-            <th>Date Created</th>
-            <th>Option 1</th>
-            <th>Option 2</th>
-            <th>Option 3</th>
-            <th>Option 4</th>
-            <th>Correct Options</th>
+            <tr>
+                <th>Question Title</th>
+                <th>Date Created</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Correct Options</th>
             </tr>
         </thead>
         <tbody>
