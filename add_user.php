@@ -1,7 +1,6 @@
 <?php
 session_start();
 include "../.configFinal.php";
-session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
@@ -17,7 +16,6 @@ function checkEmpty($field)
         return true;
     }
     return false;
-
 }
 function checkLength($field, $min, $max)
 {
@@ -62,26 +60,32 @@ function userExist($db, $username)
 
     return $exist;
 }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $isAdmin = isset($_POST['isAdmin']) ? 1 : 0;
     $valid = true;
 
     if (checkEmpty($_POST['username']) === true) {
+        // netreba toastr, validacia js
         $error_username .= "<p>Enter Username!</p> <br>";
         $valid = false;
     } elseif (checkLength($_POST['username'], 5, 32) === false) {
         $error_username .= "<p>Username must have between 5-32 chars</p><br>";
+        $_SESSION["toast_error"] = "Username must have between 5-32 chars";
         $valid = false;
     } elseif (checkUsername($_POST['username']) === false) {
         $error_username .= "<p>Username cannot not contain special characters</p><br>";
+        $_SESSION["toast_error"] = "Username cannot not contain special characters";
         $valid = false;
     }
 
     if (checkEmpty($_POST['password']) === true) {
+        // netreba toastr, validacia js
         $error_password .= "<p>Enter Password!</p> <br>";
         $valid = false;
     } elseif (checkLength($_POST['password'], 5, 100) === false) {
+        // netreba toastr, validacia js
         $error_password .= "<p>Password must have between 5-100 chars</p><br>";
         $valid = false;
     }
@@ -89,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (userExist($db, $_POST['username']) === true) {
         $errmsg .= "User with this Username already exist<br></p>";
+        $_SESSION["toast_error"] = "User with this Username already exists";
         $valid = false;
     }
 
@@ -111,10 +116,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             unset($stmt);
             $_SESSION["toast_success"] = "User was successfully added";
+            session_write_close();
             header("Location: admin.php");
+            exit;
         }
     }
-    unset($db);
+    unset($db); // toto tu mozno netreba
 }
 
 ?>
@@ -123,8 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Add User</title>
     <link rel="stylesheet" href="formsheet.css">
@@ -142,33 +148,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
     <div class="login-container">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="login-form"
-            onclick="validateForm()">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="login-form" onclick="validateForm()">
             <h2>Add User</h2>
             <div class="input-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required pattern="[a-zA-Z0-9_-]{5,32}"
-                    onblur="validateInput('Please enter Username!', 'Username cannot contain special characters (min-5, max-32)', 'username', 'error-username')">
+                <input type="text" id="username" name="username" required pattern="[a-zA-Z0-9_-]{5,32}" onblur="validateInput('Please enter Username!', 'Username cannot contain special characters (min-5, max-32)', 'username', 'error-username')">
                 <span class="error-msg" id="error-username"><?php if (isset($error_username)) {
-                    echo $error_username;
-                } ?></span>
+                                                                echo $error_username;
+                                                            } ?></span>
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" pattern="^.{5,100}$"
-                    oninput="validateInput('Please enter Password!', 'min-5, max-100', 'password', 'error-password')"
-                    required>
+                <input type="password" id="password" name="password" pattern="^.{5,100}$" oninput="validateInput('Please enter Password!', 'min-5, max-100', 'password', 'error-password')" required>
                 <span class="error-msg" id="error-password"><?php if (isset($error_password)) {
-                    echo $error_password;
-                } ?></span>
+                                                                echo $error_password;
+                                                            } ?></span>
             </div>
             <div>
                 <label>Is Admin:</label>
                 <input type="checkbox" name="isAdmin">
             </div>
             <span class="error-msg" id="userexist"><?php if (isset($errmsg)) {
-                echo $errmsg;
-            } ?></span>
+                                                        echo $errmsg;
+                                                    } ?></span>
             <button type="submit">Register</button>
         </form>
     </div>
@@ -177,22 +179,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         toastr.options = {
-            "positionClass": "toast-top-right",     // tu sa meni pozicia toastr
+            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
         };
 
-        <?php if (isset($_SESSION["toast_success"])): ?>
+        <?php if (isset($_SESSION["toast_success"])) : ?>
             toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
 
             <?php unset($_SESSION["toast_success"]); ?>
         <?php endif; ?>
 
-        <?php if (isset($_SESSION["toast_error"])): ?>
+        <?php if (isset($_SESSION["toast_error"])) : ?>
             toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
 
             <?php unset($_SESSION["toast_error"]); ?>
         <?php endif; ?>
-
-
     </script>
 </body>
 

@@ -9,15 +9,32 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_
     exit;
 }
 
-// Získanie user_id z URL
-$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : "die('ERROR: User ID not specified.')";
+// najdeme ID admina, kvoli kontrole vymazania sameho seba
+$adminName = $_SESSION["username"];
+$stmt = $db->prepare("SELECT id FROM users WHERE username = ?");
+$stmt->execute([$adminName]);
+$adminId = $stmt->fetch();
 
-// Načítanie údajov užívateľa z databázy
-$stmt = $db->prepare("DELETE FROM users WHERE id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!isset($_GET['user_id'])) {
+    $_SESSION["toast_error"] = "The user was not found";
+} else {
+    $user_id = $_GET['user_id'];
+
+    if ($adminId['id'] == $user_id) {
+        $_SESSION["toast_error"] = "You cannot remove yourself";
+        header("location: admin.php");
+        exit;
+    }
+
+    $stmt = $db->prepare("DELETE FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+
+    if ($stmt->rowCount() === 0) {
+        $_SESSION["toast_error"] = "User with ID $user_id not found";
+    } else {
+        $_SESSION["toast_success"] = "User deleted successfully";
+    }
+}
 
 header("location: admin.php");
 exit;
-
-
