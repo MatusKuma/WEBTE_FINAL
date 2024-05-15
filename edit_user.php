@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include "../.configFinal.php"; // Zahrnutie databázového pripojenia
@@ -16,8 +15,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Aktualizácia údajov v databáze
     $stmt = $db->prepare("UPDATE users SET username = ?, isAdmin = ? WHERE id = ?");
-    $stmt->execute([$username, $isAdmin, $user_id]);
-
+    if ($stmt->execute([$username, $isAdmin, $user_id])) {
+        $_SESSION["toast_success"] = "User updated successfully";
+    } else {
+        $_SESSION["toast_error"] = "Failed to update user";
+    }
     // Presmerovanie späť na zoznam užívateľov alebo informovanie o úspechu
     header("Location: admin.php");
     exit;
@@ -44,13 +46,15 @@ $isAdmin = $user['isAdmin'];
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="navigation_bar">
+    <div class="navigation_bar">
         <div class="navbar">
             <a href="add_user.php">Add User</a>
             <a href="admin.php">Home</a>
@@ -74,4 +78,5 @@ $isAdmin = $user['isAdmin'];
         </div>
     </form>
 </body>
+
 </html>

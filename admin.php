@@ -27,6 +27,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
 <body>
     <div class="navigation_bar">
         <div class="navbar">
+            <a href="add_question_admin.php">Add question</a>
             <a href="add_user.php">Add User</a>
             <a href="admin.php">Home</a>
             <a href="logout.php">Log out</a>
