@@ -2,16 +2,16 @@
 include "../.configFinal.php";
 
 session_start();
+
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-} else {
-    if (!isset($_SESSION['admin']) && $_SESSION['admin'] === false) {
-        header("Location: logged_in.php");
-        exit;
-    }
 }
 
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: logged_in.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,7 +52,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-                    echo "<td><a href='view_questions.php?user_id=" . $row['id'] . "'>View Questions</a></td>";
+                    echo "<td><a href='view_questions_admin.php?user_id=" . $row['id'] . "'>View Questions</a></td>";
                     echo "<td><a href='edit_user.php?user_id=" . $row['id'] . "'>Edit</a></td>";
                     echo "<td><a href='delete_user.php?user_id=" . $row['id'] . "'>Delete</a></td>";
                     echo "<td><a href='change_password.php?user_id=" . $row['id'] . "'>Change Password</a></td>";

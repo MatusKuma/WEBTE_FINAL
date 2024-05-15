@@ -2,11 +2,6 @@
 session_start();
 include "../.configFinal.php"; // Zabezpečte správne pripojenie k databáze
 
-if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-    header("Location: admin.php");
-    exit;
-}
-
 // Získanie parametra kódu otázky z URL
 $code = $_GET['code'] ?? '';
 $questionType = $_GET['question_type'] ?? '';
@@ -18,7 +13,9 @@ $stmt->execute([$code]);
 $question = $stmt->fetch();
 
 if (!$question) {
-    die("Otázka nenájdená.");
+    $_SESSION["toast_error"] = "Question does not exist.";
+    header("Location: index.php");
+    exit;
 }
 
 $questionId = $question['id'];
@@ -87,9 +84,11 @@ if ($questionType === 'options') {
     <div class="navigation_bar">
         <div class="navbar">
             <a href="find_question.php">Find question</a>
-            <a href="add_question_user.php">Add question</a>
             <a href="logged_in.php">Home</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
+            <?php if (isset($_SESSION["username"])) : ?>
+                <a href="logout.php">Log out</a>
+                <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
+            <?php endif; ?>
         </div>
     </div>
 

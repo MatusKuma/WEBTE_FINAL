@@ -199,7 +199,9 @@ function randString()
         <h2>HOME</h2>
         <div class="navbar">
             <a href="find_question.php">Find question</a>
+            <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
             <a href="logged_in.php">Home</a>
+            <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
     </div>

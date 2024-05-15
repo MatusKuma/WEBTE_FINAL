@@ -5,12 +5,13 @@ session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-} else {
-    if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-        header("Location: admin.php");
-        exit;
-    }
 }
+
+if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
+    header("Location: admin.php");
+    exit;
+}
+
 
 $id = $_GET['id'];
 $stmt = $db->prepare("SELECT * FROM questions_open WHERE id = ?");
@@ -20,7 +21,7 @@ $question = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $isActive = isset($_POST['isActive']) ? 1 : 0;
-    
+
     $stmt = $db->prepare("UPDATE questions_open SET title = ?, isActive = ? WHERE id = ?");
     $stmt->execute([$title, $isActive, $id]);
 
@@ -31,14 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit Open Question</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="navigation_bar">
         <div class="navbar">
+            <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
             <a href="logged_in.php">Home</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
@@ -60,4 +64,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </form>
 </body>
+
 </html>

@@ -4,8 +4,13 @@ session_start();
 include "../.configFinal.php"; // Zahrnutie databázového pripojenia
 
 // Kontrola prihlásenia a oprávnení
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
+    exit;
+}
+
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: logged_in.php");
     exit;
 }
 

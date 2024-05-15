@@ -1,15 +1,17 @@
 <?php
 session_start();
 include "../.configFinal.php";
+
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-} else {
-    if (!isset($_SESSION['admin']) && $_SESSION['admin'] === false) {
-        header("Location: logged_in.php");
-        exit;
-    }
 }
+
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: logged_in.php");
+    exit;
+}
+
 function checkEmpty($field)
 {
     if (empty(trim($field))) {
@@ -141,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="navigation_bar">
         <div class="navbar">
-            <a href="add_user.php">Add User</a>
+            <a href="add_question_admin.php">Add question</a>
             <a href="admin.php">Home</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>

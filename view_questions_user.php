@@ -5,12 +5,14 @@ session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-} else {
-    if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-        header("Location: admin.php");
-        exit;
-    }
 }
+
+if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
+    header("Location: admin.php");
+    exit;
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +28,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
 <body>
     <div class="navigation_bar">
         <div class="navbar">
-            <a href="add_user.php">Add User</a>
-            <a href="admin.php">Home</a>
+            <a href="find_question.php">Find question</a>
+            <a href="add_question_user.php">Add question</a>
+            <a href="logged_in.php">Home</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
@@ -116,12 +119,12 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#questionTableOpen').DataTable();
             $('#questionTableOption').DataTable();
         });
 
-        $(document).on('change', '.isActiveCheckbox', function () {
+        $(document).on('change', '.isActiveCheckbox', function() {
             var id = $(this).data('id');
             var isActive = $(this).is(':checked') ? 1 : 0;
             var table = $(this).closest('table').attr('id');
@@ -134,16 +137,16 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     isActive: isActive,
                     table: table
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log('Status updated successfully');
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error updating status:', error);
                 }
             });
         });
 
-        $(document).on('click', '.delete-link', function (e) {
+        $(document).on('click', '.delete-link', function(e) {
             e.preventDefault();
 
             var id = $(this).data('id');
@@ -156,10 +159,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     id: id,
                     type: type
                 },
-                success: function (response) {
+                success: function(response) {
                     location.reload();
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error deleting question:', error);
                 }
             });

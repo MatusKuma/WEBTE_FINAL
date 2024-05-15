@@ -1,15 +1,17 @@
 <?php
 include "../.configFinal.php";
 session_start();
+
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-} else {
-    if (!isset($_SESSION['admin']) && $_SESSION['admin'] === false) {
-        header("Location: logged_in.php");
-        exit;
-    }
 }
+
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: logged_in.php");
+    exit;
+}
+
 function checkEmpty($field)
 {
     if (empty(trim($field))) {
@@ -92,6 +94,7 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
         <h2>Change Password</h2>
         <div class="navbar">
             <a href="admin.php">Home</a>
+            <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
     </div>

@@ -3,10 +3,17 @@ session_start();
 include "../.configFinal.php"; // Zahrnutie databázového pripojenia
 
 // Kontrola prihlásenia a oprávnení
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || !isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
 }
+
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header("Location: logged_in.php");
+    exit;
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Získanie hodnôt z formulára
     $user_id = $_POST['user_id'];
@@ -56,6 +63,7 @@ $isAdmin = $user['isAdmin'];
 <body>
     <div class="navigation_bar">
         <div class="navbar">
+            <a href="add_question_admin.php">Add question</a>
             <a href="add_user.php">Add User</a>
             <a href="admin.php">Home</a>
             <a href="logout.php">Log out</a>
