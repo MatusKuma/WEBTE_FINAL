@@ -47,6 +47,7 @@
                         $_SESSION["loggedin"] = true;
                         $_SESSION["username"] = $row['username'];
                         $_SESSION["admin"] = ($row['isAdmin'] == 1);
+                        $_SESSION["user_id"] = $row["id"];
                         header("location: logged_in.php");
                         exit;
                 }
