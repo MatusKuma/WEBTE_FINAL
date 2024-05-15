@@ -7,10 +7,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     exit;
 }
 
-if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-    header("Location: admin.php");
-    exit;
-}
+
 
 
 $id = $_GET['id'];

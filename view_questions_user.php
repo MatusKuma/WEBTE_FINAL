@@ -7,10 +7,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     exit;
 }
 
-if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-    header("Location: admin.php");
-    exit;
-}
+
 
 
 ?>
@@ -41,6 +38,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
         <thead>
             <tr>
                 <th>Question Title</th>
+                <th>Subject</th>
                 <th>Date Created</th>
                 <th>Active</th>
                 <th>Edit</th>
@@ -58,6 +56,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                     echo "<td><input type='checkbox' class='isActiveCheckbox' data-id='" . $row['id'] . "' " . ($row['isActive'] ? 'checked' : '') . "></td>";
                     echo "<td><a href='edit_question_open.php?id=" . $row['id'] . "'>Edit</a></td>";
@@ -66,7 +65,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='6'>No Open questions found</td></tr>";
+                echo "<tr><td>No Open questions found</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>
@@ -76,6 +75,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
         <thead>
             <tr>
                 <th>Question Title</th>
+                <th>Subject</th>
                 <th>Date Created</th>
                 <th>Option 1</th>
                 <th>Option 2</th>
@@ -98,6 +98,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
                     $correct_answers = str_split($row["correct_answer"]);
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_1']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_2']) . "</td>";
@@ -115,7 +116,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='11'>No questions with options found</td></tr>";
+                echo "<tr><td>No questions with options found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>

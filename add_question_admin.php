@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = $_POST['subject'];
     $option = $_POST['option'];
     $creator_id = $_POST["userSelect"];
+    $eval_type = $_POST['eval_type_select'];
 
 
 
@@ -85,8 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Insert data into your database
         try {
-            $stmt = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject, code) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$creator_id, $timestamp, '1', $title, $subject, $code]);
+            $stmt = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject, code, type) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$creator_id, $timestamp, '1', $title, $subject, $code, $eval_type]);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -163,7 +164,15 @@ function randString()
                 ?>
 
             </select><br>
+            <div id="eval_type" class="<?php if (!isset($_POST['option']) || $_POST['option'] === 'option1')
+                                            echo 'hidden'; ?>">
+                <label>Evaluation Type:</label><br>
+                <select name="eval_type_select" id="eval_type_select">
+                    <option value="wordcloud">Word Cloud</option>
+                    <option value="list">Unordered List</option>
+                </select>
 
+            </div>
             <label for="title">Title:</label><br>
             <input type="text" id="title" name="title" required minlength="5" maxlength="100"><br>
             <div id="answers" class="<?php if (!isset($_POST['option']) || $_POST['option'] === 'option2')
@@ -199,6 +208,8 @@ function randString()
         function updateFormVisibility() {
             let option1 = document.getElementById('option1').checked;
             let answersDiv = document.getElementById('answers');
+            let evalType = document.getElementById("eval_type");
+            evalType.style.display = option1 ? "none" : "block";
             answersDiv.style.display = option1 ? 'block' : 'none';
         }
 
@@ -224,7 +235,6 @@ function randString()
 
         function validateForm() {
             if (document.getElementById('option1').checked) {
-                console.log("checkujem moznosti");
                 validateCheckboxes();
                 return document.getElementById('error-message').textContent === '';
             }

@@ -1,16 +1,15 @@
 <?php
 include "../.configFinal.php"; // Include your database connection setup
-
 session_start();
-
+session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-}
-
-if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
-    header("Location: logged_in.php");
-    exit;
+} else {
+    if (!isset($_SESSION['admin']) && $_SESSION['admin'] === false) {
+        header("Location: logged_in.php");
+        exit;
+    }
 }
 ?>
 
@@ -27,7 +26,6 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
 <body>
     <div class="navigation_bar">
         <div class="navbar">
-            <a href="add_question_admin.php">Add question</a>
             <a href="add_user.php">Add User</a>
             <a href="admin.php">Home</a>
             <a href="logout.php">Log out</a>
@@ -40,7 +38,6 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
         <thead>
             <tr>
                 <th>Question Title</th>
-                <th>Subject</th>
                 <th>Date Created</th>
             </tr>
         </thead>
@@ -56,12 +53,11 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No questions found for this user.</td></tr>";
+                echo "<tr><td colspan='2'>No questions found for this user.</td><td></td></tr>";
             }
             ?>
         </tbody>
@@ -72,7 +68,6 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
         <thead>
             <tr>
                 <th>Question Title</th>
-                <th>Subject</th>
                 <th>Date Created</th>
                 <th>Option 1</th>
                 <th>Option 2</th>
@@ -93,7 +88,6 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                     $correct_answers = str_split($row["correct_answer"]);
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_1']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_2']) . "</td>";
@@ -107,7 +101,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td>No questions found for this user</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+                echo "<tr><td colspan='2'>No questions found for this user.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>
@@ -115,10 +109,11 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script>
-        $(document).ready(function() {
+
+        $(document).ready(function () {
             $('#questionTableOpen').DataTable();
         });
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#questionTableOption').DataTable();
         });
     </script>
