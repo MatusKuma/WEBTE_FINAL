@@ -1,13 +1,13 @@
 <?php
 include "../.configFinal.php"; // Include your database connection setup
 session_start();
-session_start();
+
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
 } else {
-    if (!isset($_SESSION['admin']) && $_SESSION['admin'] === false) {
-        header("Location: logged_in.php");
+    if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
+        header("Location: admin.php");
         exit;
     }
 }
@@ -39,12 +39,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
             <tr>
                 <th>Question Title</th>
                 <th>Date Created</th>
+                <th>Active</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             <?php
-
-
             $user_id = $_GET['user_id'];
             $stmt = $db->prepare("SELECT * FROM questions_open WHERE creator_id = ?");
             $stmt->execute([$user_id]);
@@ -54,17 +55,19 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+                    echo "<td><input type='checkbox' class='isActiveCheckbox' data-id='" . $row['id'] . "' " . ($row['isActive'] ? 'checked' : '') . "></td>";
+                    echo "<td><a href='edit_question_open.php?id=" . $row['id'] . "'>Edit</a></td>";
+                    echo "<td><a href='#' class='delete-link' data-id='" . $row['id'] . "' data-type='open'>Delete</a></td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='2'>No questions found for this user.</td><td></td></tr>";
+                echo "<tr><td colspan='5'>No Open questions found</td></tr>";
             }
             ?>
         </tbody>
     </table>
     <h2>Questions with Options</h2>
     <table id="questionTableOption" class="display">
-
         <thead>
             <tr>
                 <th>Question Title</th>
@@ -74,12 +77,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 <th>Option 3</th>
                 <th>Option 4</th>
                 <th>Correct Options</th>
+                <th>Active</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             <?php
-
-            $user_id = $_GET['user_id'];
             $stmt = $db->prepare("SELECT * FROM questions_options WHERE creator_id = ?");
             $stmt->execute([$user_id]);
 
@@ -98,10 +102,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                         echo $row["option_" . $i] . ",";
                     }
                     echo "</td>";
+                    echo "<td><input type='checkbox' class='isActiveCheckbox' data-id='" . $row['id'] . "' " . ($row['isActive'] ? 'checked' : '') . "></td>";
+                    echo "<td><a href='edit_question_option.php?id=" . $row['id'] . "'>Edit</a></td>";
+                    echo "<td><a href='#' class='delete-link' data-id='" . $row['id'] . "' data-type='option'>Delete</a></td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='2'>No questions found for this user.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+                echo "<tr><td colspan='10'>No questions with options found</td></tr>";
             }
             ?>
         </tbody>
@@ -109,12 +116,54 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script>
-
         $(document).ready(function () {
             $('#questionTableOpen').DataTable();
-        });
-        $(document).ready(function () {
             $('#questionTableOption').DataTable();
+        });
+
+        $(document).on('change', '.isActiveCheckbox', function () {
+            var id = $(this).data('id');
+            var isActive = $(this).is(':checked') ? 1 : 0;
+            var table = $(this).closest('table').attr('id');
+
+            $.ajax({
+                url: 'update_isActive.php',
+                type: 'POST',
+                data: {
+                    id: id,
+                    isActive: isActive,
+                    table: table
+                },
+                success: function (response) {
+                    console.log('Status updated successfully');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error updating status:', error);
+                }
+            });
+        });
+
+        $(document).on('click', '.delete-link', function (e) {
+            e.preventDefault();
+
+            var id = $(this).data('id');
+            var type = $(this).data('type');
+
+            $.ajax({
+                url: 'delete_question.php',
+                type: 'POST',
+                data: {
+                    id: id,
+                    type: type
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error deleting question:', error);
+                }
+            });
+
         });
     </script>
 </body>
