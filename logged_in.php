@@ -27,7 +27,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
             <a href="find_question.php">Find question</a>
             <a href="add_question_user.php">Add question</a>
             <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
-            <a href="logged_in.php">Home</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
