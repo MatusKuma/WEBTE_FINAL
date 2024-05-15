@@ -140,11 +140,10 @@ function randString()
 
 <body>
     <div class="navigation_bar">
-        <h2>HOME</h2>
         <div class="navbar">
-            <a href="add_question_user.php">Add question</a>
-            <a href="logout.php">Log out</a>
+            <a href="add_user.php">Add User</a>
             <a href="admin.php">Home</a>
+            <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
     </div>

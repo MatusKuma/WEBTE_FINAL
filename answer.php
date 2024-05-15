@@ -91,11 +91,10 @@ if ($questionType === 'options') {
 
 <body>
 <div class="navigation_bar">
-        <h2>HOME</h2>
         <div class="navbar">
             <a href="find_question.php">Find question</a>
             <a href="add_question_user.php">Add question</a>
-            <a href="logout.php">Log out</a>
+            <a href="logged_in.php">Home</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2> 
         </div>
 </div>

@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $subject = $_POST['subject'];
     $option = $_POST['option'];
+    $eval_type = $_POST['eval_type_select'];
 
 
 
@@ -92,8 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Insert data into your database
         try {
-            $stmt = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject, code) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$creator_id, $timestamp, '1', $title, $subject, $code]);
+            $stmt = $db->prepare("INSERT INTO questions_open (creator_id, timestamp, isActive, title, subject, code, type) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$creator_id, $timestamp, '1', $title, $subject, $code, $eval_type]);
             $_SESSION["toast_success"] = "Your question has been created.";
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -147,8 +148,7 @@ function randString()
         <h2>HOME</h2>
         <div class="navbar">
             <a href="find_question.php">Find question</a>
-            <a href="add_question_user.php">Pridaj otázku</a>
-            <a href="logout.php">Log out</a>
+            <a href="logged_in.php">Home</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
     </div>
@@ -162,6 +162,15 @@ function randString()
             <input type="radio" name="option" id="option2" value="option2" <?php if (isset($_POST['option']) && $_POST['option'] === 'option2')
                 echo 'checked'; ?>>
             <label for="option2">Otvorená otázka</label><br><br>
+            <div id="eval_type" class="<?php if (!isset($_POST['option']) || $_POST['option'] === 'option1')
+                echo 'hidden'; ?>">
+                <label>Evaluation Type:</label><br>
+                <select name="eval_type_select" id="eval_type_select">
+                    <option value="wordcloud">Word Cloud</option>
+                    <option value="list">Unordered List</option>
+                </select>
+                
+            </div>
             <label for="title">Title:</label><br>
             <input type="text" id="title" name="title" required minlength="5" maxlength="100"><br>
             <div id="answers" class="<?php if (!isset($_POST['option']) || $_POST['option'] === 'option2')
@@ -201,6 +210,8 @@ function randString()
         function updateFormVisibility() {
             let option1 = document.getElementById('option1').checked;
             let answersDiv = document.getElementById('answers');
+            let evalType = document.getElementById("eval_type");
+            evalType.style.display = option1 ? "none" : "block";
             answersDiv.style.display = option1 ? 'block' : 'none';
         }
 
