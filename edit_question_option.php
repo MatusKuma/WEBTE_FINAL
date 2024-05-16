@@ -28,7 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $db->prepare("UPDATE questions_options SET title = ?, option_1 = ?, option_2 = ?, option_3 = ?, option_4 = ?, correct_answer = ?, isActive = ? WHERE id = ?");
     $stmt->execute([$title, $option1, $option2, $option3, $option4, $correct_answer, $isActive, $id]);
-
+    $_SESSION["toast_success"] = "Question has been updated successfully";
+    session_write_close();
     header("Location: view_questions_user.php?user_id=" . $_SESSION['user_id']);
     exit;
 }

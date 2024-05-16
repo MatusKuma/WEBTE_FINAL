@@ -24,13 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($stmt->execute([$id])) {
-            echo "Question deleted successfully";
+            $_SESSION["toast_success"] = "Question deleted successfully";
         } else {
-            echo "Error deleting question";
+            $_SESSION["toast_error"] = "Error deleting question";
         }
     } else {
-        echo "Invalid request";
+        $_SESSION["toast_error"] = "Invalid request";
     }
 } else {
-    echo "Invalid request method";
+    $_SESSION["toast_error"] = "Invalid request method";
 }

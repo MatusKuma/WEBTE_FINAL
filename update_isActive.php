@@ -29,13 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($stmt->execute([$isActive, $id])) {
-            echo "Status updated successfully";
+            // echo "Status updated successfully";
+            // $_SESSION["toast_success"] = "Status updated successfully";
         } else {
-            echo "Error updating status";
+            // echo "Error updating status";
+            // $_SESSION["toast_error"] = "Error updating status";
         }
     } else {
-        echo "Invalid request";
+        // echo "Invalid request";
+        // $_SESSION["toast_error"] = "Invalid request";
     }
 } else {
-    echo "Invalid request method";
+    // echo "Invalid request method";
+    // $_SESSION["toast_error"] = "Invalid request method";
 }

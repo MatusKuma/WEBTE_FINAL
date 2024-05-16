@@ -9,7 +9,8 @@ error_reporting(E_ALL);
 require_once("../.configFinal.php");
 
 // Funkcia na export otázok do CSV súboru
-function exportQuestionsToCSV($db, $filename) {
+function exportQuestionsToCSV($db, $filename)
+{
     try {
         // Overenie prítomnosti záznamov v tabuľke questions_options
         $stmtOptions = $db->prepare("SELECT COUNT(*) FROM questions_options WHERE isActive = 1");
@@ -70,17 +71,19 @@ function exportQuestionsToCSV($db, $filename) {
             fclose($fp);
 
             $message = "Otázky boli úspešne exportované do CSV súboru: $filename";
-            echo '<span style="color: white;">' . $message . '</span><br>';
+            // // echo '<span style="color: white;">' . $message . '</span><br>';
+            $_SESSION["toast_success"] =  $message;
         } else {
-            echo "Žiadne aktívne otázky na export.";
+            $_SESSION["toast_error"] = "Žiadne aktívne otázky na export.";
         }
-    } catch(PDOException $e) {
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
 // Funkcia na export odpovedí do CSV súboru
-function exportAnswersToCSV($db, $filename) {
+function exportAnswersToCSV($db, $filename)
+{
     try {
         // Overenie prítomnosti záznamov v tabuľkách answers_options a answers_open
         $stmtOptions = $db->prepare("SELECT COUNT(*) FROM answers_options");
@@ -136,11 +139,12 @@ function exportAnswersToCSV($db, $filename) {
             fclose($fp);
 
             $message = "Odpovede boli úspešne exportované do CSV súboru: $filename";
-            echo '<span style="color: white;">' . $message . '</span><br>';
+            // echo '<span style="color: white;">' . $message . '</span><br>';
+            $_SESSION["toast_success"] .=  $message;
         } else {
-            echo "Žiadne odpovede na export.";
+            $_SESSION["toast_error"] = "Žiadne odpovede na export.";
         }
-    } catch(PDOException $e) {
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
@@ -150,19 +154,22 @@ try {
     // Použitie existujúcej premennej $db z konfiguračného súboru
     exportQuestionsToCSV($db, 'questions.csv');
     exportAnswersToCSV($db, 'answers.csv');
-
-} catch(PDOException $e) {
+    header("Location: logged_in.php");
+    exit;
+} catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>WEBTE FINAL</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
+
 <body>
 
     <script src="script.js"></script>
@@ -187,4 +194,5 @@ try {
         <?php endif; ?>
     </script>
 </body>
+
 </html>
