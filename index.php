@@ -27,6 +27,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     <div class="navigation_bar">
         <h2>HOME</h2>
         <div class="navbar">
+            <a href="q&a_to_csv.php">Export Q&A</a>
             <a href="find_question.php">Find question</a>
             <a href="login.php">Login</a>
             <a href="register.php">Register</a>
