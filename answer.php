@@ -49,17 +49,34 @@ if ($count > 0 && isset($_SESSION["user_id"])) {
 }
 
 // Spracovanie odpovede
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['answer'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $timestamp = date("Y-m-d H:i:s");
 
     if ($questionType === 'open') {
-        $answer = $_POST['answer'];
+        $answers = $_POST['answer'] ?? [];
+        if(empty($answers)){
+            $_SESSION["toast_error"] = "You answer is empty";
+            header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
+            exit;
+        }
+        
         $insertStmt = $db->prepare("INSERT INTO answers_open (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
         $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
         $inserted_answer_id = $db->lastInsertId();
         $_SESSION["toast_success"] = "Your answer has been submitted.";
     } else {
         $answers = $_POST['answer'] ?? [];
+        $answerCount = count($answers);
+        // Backendová validácia počtu zaškrtnutých možností
+        if ($answerCount === 0) {
+            $_SESSION["toast_error"] = "Please select at least one option";
+            header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
+            exit;
+        }else if ($answerCount === 4) {
+            $_SESSION["toast_error"] = "You cannot select all options";
+            header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
+            exit;
+        }
         $answer = implode('', $answers);
         $insertStmt = $db->prepare("INSERT INTO answers_options (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
         $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
@@ -89,6 +106,7 @@ if ($questionType === 'options') {
     <meta charset="UTF-8">
     <title>Answer</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 
