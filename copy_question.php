@@ -68,4 +68,4 @@ function randString() {
     }
     return $randomStr;
 }
-?>
+
