@@ -1,5 +1,5 @@
 <?php
-include "../.configFinal.php"; // Include your database connection setup
+include "./.configFinal.php";
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
@@ -130,108 +130,108 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#questionTableOpen').DataTable();
-            $('#questionTableOption').DataTable();
-        });
+    $(document).ready(function() {
+        $('#questionTableOpen').DataTable();
+        $('#questionTableOption').DataTable();
+    });
 
-        $(document).on('change', '.isActiveCheckbox', function() {
-            var id = $(this).data('id');
-            var isActive = $(this).is(':checked') ? 1 : 0;
-            var table = $(this).closest('table').attr('id');
+    $(document).on('change', '.isActiveCheckbox', function() {
+        var id = $(this).data('id');
+        var isActive = $(this).is(':checked') ? 1 : 0;
+        var table = $(this).closest('table').attr('id');
 
 
-            $.ajax({
-                url: 'update_isActive.php',
-                type: 'POST',
-                data: {
-                    id: id,
-                    isActive: isActive,
-                    table: table,
-                    toast_success: '<?php echo isset($_SESSION["toast_success"]) ? $_SESSION["toast_success"] : "" ?>',
-                    toast_error: '<?php echo isset($_SESSION["toast_error"]) ? $_SESSION["toast_error"] : "" ?>'
-                },
-                success: function(response) {
-                    console.log('Status updated successfully');
-                    if (response.toast_success) {
-                        toastr.success(response.toast_success);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error updating status:', error);
-                    if (response.toast_error) {
-                        toastr.error(response.toast_error);
-                    }
+        $.ajax({
+            url: 'update_isActive.php',
+            type: 'POST',
+            data: {
+                id: id,
+                isActive: isActive,
+                table: table,
+                toast_success: '<?php echo isset($_SESSION["toast_success"]) ? $_SESSION["toast_success"] : "" ?>',
+                toast_error: '<?php echo isset($_SESSION["toast_error"]) ? $_SESSION["toast_error"] : "" ?>'
+            },
+            success: function(response) {
+                console.log('Status updated successfully');
+                if (response.toast_success) {
+                    toastr.success(response.toast_success);
                 }
-            });
-
-        });
-
-        $(document).on('click', '.delete-link', function(e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var type = $(this).data('type');
-
-            $.ajax({
-                url: 'delete_question.php',
-                type: 'POST',
-                data: {
-                    id: id,
-                    type: type,
-                    toast_success: '<?php echo isset($_SESSION["toast_success"]) ? $_SESSION["toast_success"] : "" ?>',
-                    toast_error: '<?php echo isset($_SESSION["toast_error"]) ? $_SESSION["toast_error"] : "" ?>'
-                },
-                success: function(response) {
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting question:', error);
-                    if (response.toast_error) {
-                        toastr.error(response.toast_error);
-                    }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating status:', error);
+                if (response.toast_error) {
+                    toastr.error(response.toast_error);
                 }
-            });
+            }
         });
 
-        $(document).on('click', '.copy-link', function(e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var type = $(this).data('type');
+    });
 
-            $.ajax({
-                url: 'copy_question.php',
-                type: 'POST',
-                data: {
-                    id: id,
-                    type: type,
-                    toast_success: '<?php echo isset($_SESSION["toast_success"]) ? $_SESSION["toast_success"] : "" ?>',
-                    toast_error: '<?php echo isset($_SESSION["toast_error"]) ? $_SESSION["toast_error"] : "" ?>'
-                },
-                success: function(response) {
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error copying question:', error);
-                    if (response.toast_error) {
-                        toastr.error(response.toast_error);
-                    }
+    $(document).on('click', '.delete-link', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var type = $(this).data('type');
+
+        $.ajax({
+            url: 'delete_question.php',
+            type: 'POST',
+            data: {
+                id: id,
+                type: type,
+                toast_success: '<?php echo isset($_SESSION["toast_success"]) ? $_SESSION["toast_success"] : "" ?>',
+                toast_error: '<?php echo isset($_SESSION["toast_error"]) ? $_SESSION["toast_error"] : "" ?>'
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting question:', error);
+                if (response.toast_error) {
+                    toastr.error(response.toast_error);
                 }
-            });
+            }
         });
+    });
 
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-        };
+    $(document).on('click', '.copy-link', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var type = $(this).data('type');
 
-        <?php if (isset($_SESSION["toast_success"])) : ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
+        $.ajax({
+            url: 'copy_question.php',
+            type: 'POST',
+            data: {
+                id: id,
+                type: type,
+                toast_success: '<?php echo isset($_SESSION["toast_success"]) ? $_SESSION["toast_success"] : "" ?>',
+                toast_error: '<?php echo isset($_SESSION["toast_error"]) ? $_SESSION["toast_error"] : "" ?>'
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error copying question:', error);
+                if (response.toast_error) {
+                    toastr.error(response.toast_error);
+                }
+            }
+        });
+    });
 
-        <?php if (isset($_SESSION["toast_error"])) : ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
+    toastr.options = {
+        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+    };
+
+    <?php if (isset($_SESSION["toast_success"])) : ?>
+    toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+    <?php unset($_SESSION["toast_success"]); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION["toast_error"])) : ?>
+    toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+    <?php unset($_SESSION["toast_error"]); ?>
+    <?php endif; ?>
     </script>
 </body>
 

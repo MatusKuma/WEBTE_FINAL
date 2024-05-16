@@ -1,5 +1,5 @@
 <?php
-include "../.configFinal.php"; // Include your database connection setup
+include "./.configFinal.php";
 
 session_start();
 
@@ -119,12 +119,12 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#questionTableOpen').DataTable();
-        });
-        $(document).ready(function() {
-            $('#questionTableOption').DataTable();
-        });
+    $(document).ready(function() {
+        $('#questionTableOpen').DataTable();
+    });
+    $(document).ready(function() {
+        $('#questionTableOption').DataTable();
+    });
     </script>
 </body>
 

@@ -10,7 +10,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
 $isAdmin = isset($_SESSION['admin']) && $_SESSION['admin'] === true;
 
 // Includovanie konfiguračného súboru pre databázu
-require_once("../.configFinal.php");
+include "./.configFinal.php";
 
 // Funkcia na export otázok do CSV súboru
 function exportQuestionsToCSV($db, $filename, $userId, $isAdmin)

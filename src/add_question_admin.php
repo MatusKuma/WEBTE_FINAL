@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../.configFinal.php"; // Predpokladá sa, že tento súbor obsahuje pripojenie k databáze.
+include "./.configFinal.php";
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
@@ -113,23 +113,23 @@ function randString()
     <title>WEBTE FINAL</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .hidden {
-            display: none;
-        }
+    .hidden {
+        display: none;
+    }
 
-        .form-wrapper {
-            display: flex;
-            justify-content: center;
-            margin: 10px;
-        }
+    .form-wrapper {
+        display: flex;
+        justify-content: center;
+        margin: 10px;
+    }
 
-        input {
-            margin-top: 5px;
-        }
+    input {
+        margin-top: 5px;
+    }
 
-        #error-message {
-            color: red;
-        }
+    #error-message {
+        color: red;
+    }
     </style>
 </head>
 
@@ -144,7 +144,8 @@ function randString()
     </div>
 
     <div class="form-wrapper">
-        <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" onsubmit="validateForm();">
+        <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post"
+            onsubmit="validateForm();">
             <input type="radio" name="option" id="option1" value="option1" <?php if (!isset($_POST['option']) || $_POST['option'] === 'option1')
                                                                                 echo 'checked'; ?>>
             <label for="option1">Otázka s výberom</label>
@@ -194,52 +195,52 @@ function randString()
         </form>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            updateFormVisibility();
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFormVisibility();
 
-            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-                checkbox.addEventListener('change', validateCheckboxes);
-            });
-
-            document.getElementById('option1').addEventListener('change', updateFormVisibility);
-            document.getElementById('option2').addEventListener('change', updateFormVisibility);
+        document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', validateCheckboxes);
         });
 
-        function updateFormVisibility() {
-            let option1 = document.getElementById('option1').checked;
-            let answersDiv = document.getElementById('answers');
-            let evalType = document.getElementById("eval_type");
-            evalType.style.display = option1 ? "none" : "block";
-            answersDiv.style.display = option1 ? 'block' : 'none';
-        }
+        document.getElementById('option1').addEventListener('change', updateFormVisibility);
+        document.getElementById('option2').addEventListener('change', updateFormVisibility);
+    });
 
-        function validateCheckboxes() {
-            if (document.getElementById('option1').checked) {
-                let checkboxes = document.querySelectorAll('#answers input[type="checkbox"]');
-                let checkedCount = 0;
-                checkboxes.forEach(function(box) {
-                    if (box.checked) checkedCount++;
-                });
+    function updateFormVisibility() {
+        let option1 = document.getElementById('option1').checked;
+        let answersDiv = document.getElementById('answers');
+        let evalType = document.getElementById("eval_type");
+        evalType.style.display = option1 ? "none" : "block";
+        answersDiv.style.display = option1 ? 'block' : 'none';
+    }
 
-                const errorMessage = document.getElementById('error-message');
-                if (checkedCount === 0) {
-                    errorMessage.textContent = 'Please check at least one correct.';
-                } else if (checkedCount === 4) {
-                    errorMessage.textContent = 'You cannot check all options as correct.';
-                } else {
-                    errorMessage.textContent = '';
-                }
+    function validateCheckboxes() {
+        if (document.getElementById('option1').checked) {
+            let checkboxes = document.querySelectorAll('#answers input[type="checkbox"]');
+            let checkedCount = 0;
+            checkboxes.forEach(function(box) {
+                if (box.checked) checkedCount++;
+            });
+
+            const errorMessage = document.getElementById('error-message');
+            if (checkedCount === 0) {
+                errorMessage.textContent = 'Please check at least one correct.';
+            } else if (checkedCount === 4) {
+                errorMessage.textContent = 'You cannot check all options as correct.';
+            } else {
+                errorMessage.textContent = '';
             }
         }
+    }
 
 
-        function validateForm() {
-            if (document.getElementById('option1').checked) {
-                validateCheckboxes();
-                return document.getElementById('error-message').textContent === '';
-            }
-            return true;
+    function validateForm() {
+        if (document.getElementById('option1').checked) {
+            validateCheckboxes();
+            return document.getElementById('error-message').textContent === '';
         }
+        return true;
+    }
     </script>
 </body>
 

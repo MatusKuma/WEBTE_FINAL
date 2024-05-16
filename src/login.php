@@ -10,7 +10,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     }
 }
 
-include "../.configFinal.php";
+include ".configFinal.php";
 
 function checkEmpty($field)
 {
@@ -70,7 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
     <link rel="stylesheet" href="formsheet.css">
@@ -96,7 +97,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h2>Login</h2>
             <div class="input-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required pattern="[a-zA-Z0-9_]{5,32}" onblur="validateIsEmpty('Please enter Username!', 'username', 'error-username')">
+                <input type="text" id="username" name="username" required pattern="[a-zA-Z0-9_]{5,32}"
+                    onblur="validateIsEmpty('Please enter Username!', 'username', 'error-username')">
                 <span id="error-username"></span>
                 <span id="error" style="color: red;"><?php if (isset($error_username)) {
                                                             echo $error_username;
@@ -104,7 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required onblur="validateIsEmpty('Please enter password', 'password', 'error-password')">
+                <input type="password" id="password" name="password" required
+                    onblur="validateIsEmpty('Please enter password', 'password', 'error-password')">
                 <span class="error-msg" id="error-password"></span>
                 <span id="error" style="color: red;"><?php if (isset($error_password)) {
                                                             echo $error_password;
@@ -121,21 +124,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-        };
+    toastr.options = {
+        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+    };
 
-        <?php if (isset($_SESSION["toast_success"])) : ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+    <?php if (isset($_SESSION["toast_success"])) : ?>
+    toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
 
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
+    <?php unset($_SESSION["toast_success"]); ?>
+    <?php endif; ?>
 
-        <?php if (isset($_SESSION["toast_error"])) : ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+    <?php if (isset($_SESSION["toast_error"])) : ?>
+    toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
 
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
+    <?php unset($_SESSION["toast_error"]); ?>
+    <?php endif; ?>
     </script>
 </body>
 

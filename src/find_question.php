@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include "../.configFinal.php";
+include "./.configFinal.php";
 
 $error = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['code'])) {
@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['code'])) {
         <div class="navbar">
             <a href="logged_in.php">Home</a>
             <?php if (isset($_SESSION["username"])) : ?>
-                <a href="logout.php">Log out</a>
-                <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
+            <a href="logout.php">Log out</a>
+            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
             <?php endif; ?>
         </div>
     </div>
@@ -63,21 +63,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['code'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-        };
+    toastr.options = {
+        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+    };
 
-        <?php if (isset($_SESSION["toast_success"])) : ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+    <?php if (isset($_SESSION["toast_success"])) : ?>
+    toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
 
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
+    <?php unset($_SESSION["toast_success"]); ?>
+    <?php endif; ?>
 
-        <?php if (isset($_SESSION["toast_error"])) : ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+    <?php if (isset($_SESSION["toast_error"])) : ?>
+    toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
 
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
+    <?php unset($_SESSION["toast_error"]); ?>
+    <?php endif; ?>
     </script>
 </body>
 

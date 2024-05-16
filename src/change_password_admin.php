@@ -1,5 +1,5 @@
 <?php
-include "../.configFinal.php";
+include "./.configFinal.php";
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
@@ -99,59 +99,59 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
             <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$"
                 oninput="validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')">
             <span class="error-msg" id="error-newPassword"><?php if (isset($error_newPassword)) {
-                echo $error_newPassword;
-            } ?></span>
+                                                                echo $error_newPassword;
+                                                            } ?></span>
         </div>
         <div>
             <label>Confirm New Password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required
                 oninput="validatePasswords();">
             <span class="error-msg" id="error-confirmPassword"><?php if (isset($error_confirmPassword)) {
-                echo $error_confirmPassword;
-            } ?></span>
+                                                                    echo $error_confirmPassword;
+                                                                } ?></span>
             <p id="message" style="color: red"><?php if (isset($error_message) && !empty($error_message)) {
-                echo $error_message;
-            } ?></p>
+                                                    echo $error_message;
+                                                } ?></p>
         </div>
         <div>
             <input type="submit" id="submit_btn" value="Change Password" disabled>
         </div>
     </form>
     <script>
-        function validatePasswords() {
-            var newPassword = document.getElementById('new_password');
-            var confirmPassword = document.getElementById('confirm_password');
-            var currentPassword = document.getElementById('current_password');
-            var submitBtn = document.getElementById('submit_btn');
-            var message = document.getElementById('message');
+    function validatePasswords() {
+        var newPassword = document.getElementById('new_password');
+        var confirmPassword = document.getElementById('confirm_password');
+        var currentPassword = document.getElementById('current_password');
+        var submitBtn = document.getElementById('submit_btn');
+        var message = document.getElementById('message');
 
 
 
 
-            if (newPassword.value !== confirmPassword.value && (newPassword.value !== '' && confirmPassword.value !== '')) {
-                message.textContent = 'Passwords dont match';
-                message.style.color = 'red';
-                newPassword.style.borderColor = 'red';
-                confirmPassword.style.borderColor = 'red';
-                submitBtn.disabled = true;
-                return;
-            } else if (newPassword.value === confirmPassword.value && newPassword.value !== '' && confirmPassword !== '') {
-                message.textContent = 'Passwords match';
-                message.style.color = 'green';
-                confirmPassword.style.borderColor = 'green';
-                newPassword.style.borderColor = 'green';
+        if (newPassword.value !== confirmPassword.value && (newPassword.value !== '' && confirmPassword.value !== '')) {
+            message.textContent = 'Passwords dont match';
+            message.style.color = 'red';
+            newPassword.style.borderColor = 'red';
+            confirmPassword.style.borderColor = 'red';
+            submitBtn.disabled = true;
+            return;
+        } else if (newPassword.value === confirmPassword.value && newPassword.value !== '' && confirmPassword !== '') {
+            message.textContent = 'Passwords match';
+            message.style.color = 'green';
+            confirmPassword.style.borderColor = 'green';
+            newPassword.style.borderColor = 'green';
 
-                submitBtn.disabled = false;
+            submitBtn.disabled = false;
 
-            } else {
-                message.textContent = '';
-                message.style.color = 'black';
-                newPassword.style.borderColor = 'black';
-                confirmPassword.style.borderColor = 'black';
-                submitBtn.disabled = true;
-                return;
-            }
+        } else {
+            message.textContent = '';
+            message.style.color = 'black';
+            newPassword.style.borderColor = 'black';
+            confirmPassword.style.borderColor = 'black';
+            submitBtn.disabled = true;
+            return;
         }
+    }
     </script>
     <script src="script.js"></script>
 </body>

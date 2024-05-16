@@ -1,11 +1,11 @@
 <?php
-include "../.configFinal.php";
+include "./.configFinal.php";
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
-} 
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['id']) && isset($_POST['type'])) {
@@ -48,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "Invalid request method";
 }
 
-function generateUniqueCode($table) {
+function generateUniqueCode($table)
+{
     global $db;
     do {
         $code = randString();
@@ -59,7 +60,8 @@ function generateUniqueCode($table) {
     return $code;
 }
 
-function randString() {
+function randString()
+{
     $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     $charLength = strlen($chars);
     $randomStr = '';
@@ -68,4 +70,3 @@ function randString() {
     }
     return $randomStr;
 }
-

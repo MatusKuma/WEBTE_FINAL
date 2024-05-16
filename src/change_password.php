@@ -1,5 +1,5 @@
 <?php
-include "../.configFinal.php";
+include "./.configFinal.php";
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
@@ -108,14 +108,16 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
         </div>
         <div>
             <label>New Password:</label>
-            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$" oninput="validatePasswords()">
+            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$"
+                oninput="validatePasswords()">
             <span class="error-msg" id="error-newPassword"><?php if (isset($error_newPassword)) {
                                                                 echo $error_newPassword;
                                                             } ?></span>
         </div>
         <div>
             <label>Confirm New Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required oninput="validatePasswords();">
+            <input type="password" id="confirm_password" name="confirm_password" required
+                oninput="validatePasswords();">
             <span class="error-msg" id="error-confirmPassword"><?php if (isset($error_confirmPassword)) {
                                                                     echo $error_confirmPassword;
                                                                 } ?></span>
@@ -128,50 +130,52 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
         </div>
     </form>
     <script>
-        function validatePasswords() {
-            var newPassword = document.getElementById('new_password');
-            var confirmPassword = document.getElementById('confirm_password');
-            var currentPassword = document.getElementById('current_password');
-            var submitBtn = document.getElementById('submit_btn');
-            var message = document.getElementById('message');
+    function validatePasswords() {
+        var newPassword = document.getElementById('new_password');
+        var confirmPassword = document.getElementById('confirm_password');
+        var currentPassword = document.getElementById('current_password');
+        var submitBtn = document.getElementById('submit_btn');
+        var message = document.getElementById('message');
 
 
 
 
-            if (newPassword.value === currentPassword.value && newPassword.value !== '') {
-                message.textContent = 'Your new password cannot match with your current password';
-                message.style.color = 'red';
-                newPassword.style.borderColor = 'red';
+        if (newPassword.value === currentPassword.value && newPassword.value !== '') {
+            message.textContent = 'Your new password cannot match with your current password';
+            message.style.color = 'red';
+            newPassword.style.borderColor = 'red';
+            submitBtn.disabled = true;
+            return;
+        } else if (newPassword.value !== confirmPassword.value && (newPassword.value !== '' && confirmPassword.value !==
+                '')) {
+            message.textContent = 'Passwords dont match';
+            message.style.color = 'red';
+            newPassword.style.borderColor = 'red';
+            confirmPassword.style.borderColor = 'red';
+            submitBtn.disabled = true;
+            return;
+        } else if (newPassword.value === confirmPassword.value && newPassword.value !== '' && confirmPassword !== '') {
+            message.textContent = 'Passwords match';
+            message.style.color = 'green';
+            confirmPassword.style.borderColor = 'green';
+            newPassword.style.borderColor = 'green';
+            if (currentPassword.value === '' || !validateInput('Please enter new Password!', 'min-5, max-100',
+                    'new_password', 'error-newPassword')) {
                 submitBtn.disabled = true;
-                return;
-            } else if (newPassword.value !== confirmPassword.value && (newPassword.value !== '' && confirmPassword.value !== '')) {
-                message.textContent = 'Passwords dont match';
-                message.style.color = 'red';
-                newPassword.style.borderColor = 'red';
-                confirmPassword.style.borderColor = 'red';
-                submitBtn.disabled = true;
-                return;
-            } else if (newPassword.value === confirmPassword.value && newPassword.value !== '' && confirmPassword !== '') {
-                message.textContent = 'Passwords match';
-                message.style.color = 'green';
-                confirmPassword.style.borderColor = 'green';
-                newPassword.style.borderColor = 'green';
-                if (currentPassword.value === '' || !validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')) {
-                    submitBtn.disabled = true;
-                    message.textContent = '';
-                } else {
-                    submitBtn.disabled = false;
-                }
-            } else {
                 message.textContent = '';
-                message.style.color = 'black';
-                newPassword.style.borderColor = 'black';
-                confirmPassword.style.borderColor = 'black';
-                currentPassword.style.borderColor = 'black';
-                submitBtn.disabled = true;
-                return;
+            } else {
+                submitBtn.disabled = false;
             }
+        } else {
+            message.textContent = '';
+            message.style.color = 'black';
+            newPassword.style.borderColor = 'black';
+            confirmPassword.style.borderColor = 'black';
+            currentPassword.style.borderColor = 'black';
+            submitBtn.disabled = true;
+            return;
         }
+    }
     </script>
     <script src="script.js"></script>
 </body>

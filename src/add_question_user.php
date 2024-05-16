@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../.configFinal.php"; // Predpokladá sa, že tento súbor obsahuje pripojenie k databáze.
+include "./.configFinal.php";
 
 require_once 'vendor/autoload.php';
 
@@ -178,24 +178,24 @@ function randString()
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
-        .hidden {
-            display: none;
-        }
+    .hidden {
+        display: none;
+    }
 
-        .form-wrapper {
-            display: flex;
-            justify-content: center;
-            margin: 10px;
-            flex-direction: column;
-        }
+    .form-wrapper {
+        display: flex;
+        justify-content: center;
+        margin: 10px;
+        flex-direction: column;
+    }
 
-        input {
-            margin-top: 5px;
-        }
+    input {
+        margin-top: 5px;
+    }
 
-        #error-message {
-            color: red;
-        }
+    #error-message {
+        color: red;
+    }
     </style>
 </head>
 
@@ -211,7 +211,8 @@ function randString()
     </div>
 
     <div class="form-wrapper">
-        <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" onsubmit="validateForm();">
+        <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post"
+            onsubmit="validateForm();">
             <input type="radio" name="option" id="option1" value="option1" <?php if (!isset($_POST['option']) || $_POST['option'] === 'option1')
                                                                                 echo 'checked'; ?>>
             <label for="option1">Otázka s výberom</label>
@@ -247,11 +248,11 @@ function randString()
             <div id="error-message"><?php echo $error; ?></div>
         </form>
         <?php if (isset($code) && isset($dataUri)) : ?>
-            <div class="qr-code-block">
-                <label for="code">CODE:</label>
-                <input type="text" id="code" value="<?php echo $code; ?>" readonly>
-                <img src="<?php echo $dataUri ?>" alt="QR Code">
-            </div>
+        <div class="qr-code-block">
+            <label for="code">CODE:</label>
+            <input type="text" id="code" value="<?php echo $code; ?>" readonly>
+            <img src="<?php echo $dataUri ?>" alt="QR Code">
+        </div>
         <?php endif; ?>
 
     </div>
@@ -260,70 +261,70 @@ function randString()
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            updateFormVisibility();
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFormVisibility();
 
-            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-                checkbox.addEventListener('change', validateCheckboxes);
-            });
-
-            document.getElementById('option1').addEventListener('change', updateFormVisibility);
-            document.getElementById('option2').addEventListener('change', updateFormVisibility);
+        document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', validateCheckboxes);
         });
 
-        function updateFormVisibility() {
-            let option1 = document.getElementById('option1').checked;
-            let answersDiv = document.getElementById('answers');
-            let evalType = document.getElementById("eval_type");
-            evalType.style.display = option1 ? "none" : "block";
-            answersDiv.style.display = option1 ? 'block' : 'none';
-        }
+        document.getElementById('option1').addEventListener('change', updateFormVisibility);
+        document.getElementById('option2').addEventListener('change', updateFormVisibility);
+    });
 
-        function validateCheckboxes() {
-            if (document.getElementById('option1').checked) {
-                let checkboxes = document.querySelectorAll('#answers input[type="checkbox"]');
-                let checkedCount = 0;
-                checkboxes.forEach(function(box) {
-                    if (box.checked) checkedCount++;
-                });
+    function updateFormVisibility() {
+        let option1 = document.getElementById('option1').checked;
+        let answersDiv = document.getElementById('answers');
+        let evalType = document.getElementById("eval_type");
+        evalType.style.display = option1 ? "none" : "block";
+        answersDiv.style.display = option1 ? 'block' : 'none';
+    }
 
-                const errorMessage = document.getElementById('error-message');
-                if (checkedCount === 0) {
-                    errorMessage.textContent = 'Please check at least one correct.';
-                } else if (checkedCount === 4) {
-                    errorMessage.textContent = 'You cannot check all options as correct.';
-                } else {
-                    errorMessage.textContent = '';
-                }
+    function validateCheckboxes() {
+        if (document.getElementById('option1').checked) {
+            let checkboxes = document.querySelectorAll('#answers input[type="checkbox"]');
+            let checkedCount = 0;
+            checkboxes.forEach(function(box) {
+                if (box.checked) checkedCount++;
+            });
+
+            const errorMessage = document.getElementById('error-message');
+            if (checkedCount === 0) {
+                errorMessage.textContent = 'Please check at least one correct.';
+            } else if (checkedCount === 4) {
+                errorMessage.textContent = 'You cannot check all options as correct.';
+            } else {
+                errorMessage.textContent = '';
             }
         }
+    }
 
 
-        function validateForm() {
-            if (document.getElementById('option1').checked) {
-                console.log("checkujem moznosti");
-                validateCheckboxes();
-                return document.getElementById('error-message').textContent === '';
-            }
-            return true;
+    function validateForm() {
+        if (document.getElementById('option1').checked) {
+            console.log("checkujem moznosti");
+            validateCheckboxes();
+            return document.getElementById('error-message').textContent === '';
         }
+        return true;
+    }
 
 
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-        };
+    toastr.options = {
+        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+    };
 
-        <?php if (isset($_SESSION["toast_success"])) : ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+    <?php if (isset($_SESSION["toast_success"])) : ?>
+    toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
 
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
+    <?php unset($_SESSION["toast_success"]); ?>
+    <?php endif; ?>
 
-        <?php if (isset($_SESSION["toast_error"])) : ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+    <?php if (isset($_SESSION["toast_error"])) : ?>
+    toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
 
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
+    <?php unset($_SESSION["toast_error"]); ?>
+    <?php endif; ?>
     </script>
 </body>
 
