@@ -1,11 +1,10 @@
 <?php
 session_start();
 include "../.configFinal.php"; // Zabezpečte správne pripojenie k databáze
-
 // Získanie parametra kódu otázky z URL
 $code = $_GET['code'] ?? '';
 $questionType = $_GET['question_type'] ?? '';
-$userId = $_SESSION['user_id'];
+$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
 // Načítanie otázky na základe kódu a typu
 $query = $questionType === 'open' ? "SELECT * FROM questions_open WHERE code = ?" : "SELECT * FROM questions_options WHERE code = ?";
@@ -43,7 +42,7 @@ if($questionType === "open"){
 }
 
 
-if ($count > 0) {
+if ($count > 0 && isset($_SESSION["user_id"])) {
     $_SESSION["toast_error"] = "Sorry, you have already submitted your answer for this question.";
     header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType);
     exit;
@@ -57,17 +56,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['answer'])) {
         $answer = $_POST['answer'];
         $insertStmt = $db->prepare("INSERT INTO answers_open (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
         $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
+        $inserted_answer_id = $db->lastInsertId();
         $_SESSION["toast_success"] = "Your answer has been submitted.";
     } else {
         $answers = $_POST['answer'] ?? [];
-        $answersString = implode('', $answers);
+        $answer = implode('', $answers);
         $insertStmt = $db->prepare("INSERT INTO answers_options (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
-        $insertStmt->execute([$questionId, $answersString, $timestamp, $userId]);
-
+        $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
+        $inserted_answer_id = $db->lastInsertId();
         $_SESSION["toast_success"] = "Your answer has been submitted.";
+    }
+    if($userId === 0){
+        header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType . "&answer_id=" . $inserted_answer_id);
+        exit;
     }
     header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType);
     exit;
+    
 }
 
 // Načítanie možností pre otázky s výberom
