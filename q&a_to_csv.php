@@ -6,29 +6,27 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     exit;
 }
 
-if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-    header("Location: admin.php");
-    exit;
-}
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Získanie úrovne oprávnení používateľa
+$isAdmin = isset($_SESSION['admin']) && $_SESSION['admin'] === true;
 
 // Includovanie konfiguračného súboru pre databázu
 require_once("../.configFinal.php");
 
 // Funkcia na export otázok do CSV súboru
-function exportQuestionsToCSV($db, $filename)
+function exportQuestionsToCSV($db, $filename, $userId, $isAdmin)
 {
     try {
         // Overenie prítomnosti záznamov v tabuľke questions_options
-        $stmtOptions = $db->prepare("SELECT COUNT(*) FROM questions_options WHERE isActive = 1");
+        $stmtOptions = $db->prepare("SELECT COUNT(*) FROM questions_options WHERE isActive = 1 AND (creator_id = :userId OR :isAdmin)");
+        $stmtOptions->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmtOptions->bindParam(':isAdmin', $isAdmin, PDO::PARAM_BOOL);
         $stmtOptions->execute();
         $countOptions = $stmtOptions->fetchColumn();
 
         // Overenie prítomnosti záznamov v tabuľke questions_open
-        $stmtOpen = $db->prepare("SELECT COUNT(*) FROM questions_open WHERE isActive = 1");
+        $stmtOpen = $db->prepare("SELECT COUNT(*) FROM questions_open WHERE isActive = 1 AND (creator_id = :userId OR :isAdmin)");
+        $stmtOpen->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmtOpen->bindParam(':isAdmin', $isAdmin, PDO::PARAM_BOOL);
         $stmtOpen->execute();
         $countOpen = $stmtOpen->fetchColumn();
 
@@ -41,7 +39,9 @@ function exportQuestionsToCSV($db, $filename)
 
             // Export otázok z tabuľky questions_options
             if ($countOptions > 0) {
-                $stmt = $db->prepare("SELECT * FROM questions_options WHERE isActive = 1");
+                $stmt = $db->prepare("SELECT * FROM questions_options WHERE isActive = 1 AND (creator_id = :userId OR :isAdmin)");
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+                $stmt->bindParam(':isAdmin', $isAdmin, PDO::PARAM_BOOL);
                 $stmt->execute();
                 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -60,7 +60,9 @@ function exportQuestionsToCSV($db, $filename)
 
             // Export otázok z tabuľky questions_open
             if ($countOpen > 0) {
-                $stmt = $db->prepare("SELECT * FROM questions_open WHERE isActive = 1");
+                $stmt = $db->prepare("SELECT * FROM questions_open WHERE isActive = 1 AND (creator_id = :userId OR :isAdmin)");
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+                $stmt->bindParam(':isAdmin', $isAdmin, PDO::PARAM_BOOL);
                 $stmt->execute();
                 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -80,7 +82,18 @@ function exportQuestionsToCSV($db, $filename)
             // Zatvorenie súboru
             fclose($fp);
 
+<<<<<<< HEAD
             return true;
+=======
+            // URL, na ktorú chcete zprávu odkázať
+            $linkUrl = $filename;
+
+            // Text odkazu
+            $linkText = "Otázky boli úspešne exportované do CSV súboru: $filename";
+
+            // Výpis s odkazom a bielou farbou textu
+            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
+>>>>>>> 0d0cc71596c60a74225881152bac58abfa9a8ce4
         } else {
             $_SESSION["toast_error"] = "Žiadne aktívne otázky na export.";
             return false;
@@ -92,7 +105,7 @@ function exportQuestionsToCSV($db, $filename)
 }
 
 // Funkcia na export odpovedí do CSV súboru
-function exportAnswersToCSV($db, $filename)
+function exportAnswersToCSV($db, $filename, $isAdmin)
 {
     try {
         // Overenie prítomnosti záznamov v tabuľkách answers_options a answers_open
@@ -148,7 +161,18 @@ function exportAnswersToCSV($db, $filename)
             // Zatvorenie súboru
             fclose($fp);
 
+<<<<<<< HEAD
             return true;
+=======
+            // URL, na ktorú chcete zprávu odkázať
+            $linkUrl = $filename;
+
+            // Text odkazu
+            $linkText = "Odpovede boli úspešne exportované do CSV súboru: $filename";
+
+            // Výpis s odkazom a bielou farbou textu
+            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
+>>>>>>> 0d0cc71596c60a74225881152bac58abfa9a8ce4
         } else {
             $_SESSION["toast_error"] = "Žiadne odpovede na export.";
             return false;
@@ -161,7 +185,12 @@ function exportAnswersToCSV($db, $filename)
 
 // Použitie existujúceho pripojenia k databáze z konfiguračného súboru
 try {
+    // Získanie ID používateľa a úrovne oprávnení
+    $userId = $_SESSION["user_id"];
+    $isAdmin = $_SESSION['admin'];
+
     // Použitie existujúcej premennej $db z konfiguračného súboru
+<<<<<<< HEAD
     $exportQuestionsSuccess = exportQuestionsToCSV($db, 'questions.csv');
     $exportAnswersSuccess = exportAnswersToCSV($db, 'answers.csv');
 
@@ -187,3 +216,49 @@ try {
 } catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
+=======
+    exportQuestionsToCSV($db, 'questions.csv', $userId, $isAdmin);
+    exportAnswersToCSV($db, 'answers.csv', $isAdmin);
+    
+} catch (PDOException $e) {
+    echo "Connection error: " . $e->getMessage();
+}
+?>
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WEBTE FINAL</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+
+<body>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        // toastr nastavenia
+        toastr.options = {
+            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+        };
+
+        <?php if (isset($_SESSION["toast_success"])) : ?>
+            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+
+            <?php unset($_SESSION["toast_success"]); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION["toast_error"])) : ?>
+            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+
+            <?php unset($_SESSION["toast_error"]); ?>
+        <?php endif; ?>
+    </script>
+</body>
+
+</html>
+>>>>>>> 0d0cc71596c60a74225881152bac58abfa9a8ce4
