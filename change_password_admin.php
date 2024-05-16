@@ -7,8 +7,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     exit;
 }
 
-if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
-    header("Location: admin.php");
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] === false) {
+    header("Location: logged_in.php");
     exit;
 }
 
@@ -31,16 +31,12 @@ function checkLength($field, $min, $max)
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_POST["user_id"];
-    $current_password = $_POST['current_password'];
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
     $valid = true;
     $error_message = "";
 
-    if (checkEmpty($_POST['current_password']) === true) {
-        $error_message = "Enter Current Password!<br>";
-        $valid = false;
-    }
+
     if (checkEmpty($_POST['new_password']) === true) {
         $error_message = "Enter New Password!<br>";
         $valid = false;
@@ -61,16 +57,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute([$user_id]);
     $user = $stmt->fetch();
 
-    if (!$user || !password_verify($current_password, $user['password'])) {
-        $error_message = "Your current password is wrong";
-        $valid = false;
-    }
     if ($valid) {
         $new_password_hash = password_hash($new_password, PASSWORD_ARGON2ID);
         $stmt = $db->prepare("UPDATE users SET password = ? WHERE id = ?");
         $stmt->execute([$new_password_hash, $user_id]);
-        $_SESSION["toast_success"] = "Your password has been changed successfully";
-        header("location: logged_in.php");
+        $_SESSION["toast_success"] = "Password has been changed successfully";
+        header("location: admin.php");
         exit;
     }
 }
@@ -103,25 +95,23 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
     <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
         <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
         <div>
-            <label>Current Password:</label>
-            <input type="password" id="current_password" name="current_password" required>
-        </div>
-        <div>
             <label>New Password:</label>
-            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$" oninput="validatePasswords()">
+            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$"
+                oninput="validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')">
             <span class="error-msg" id="error-newPassword"><?php if (isset($error_newPassword)) {
-                                                                echo $error_newPassword;
-                                                            } ?></span>
+                echo $error_newPassword;
+            } ?></span>
         </div>
         <div>
             <label>Confirm New Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required oninput="validatePasswords();">
+            <input type="password" id="confirm_password" name="confirm_password" required
+                oninput="validatePasswords();">
             <span class="error-msg" id="error-confirmPassword"><?php if (isset($error_confirmPassword)) {
-                                                                    echo $error_confirmPassword;
-                                                                } ?></span>
+                echo $error_confirmPassword;
+            } ?></span>
             <p id="message" style="color: red"><?php if (isset($error_message) && !empty($error_message)) {
-                                                    echo $error_message;
-                                                } ?></p>
+                echo $error_message;
+            } ?></p>
         </div>
         <div>
             <input type="submit" id="submit_btn" value="Change Password" disabled>
@@ -138,13 +128,7 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
 
 
-            if (newPassword.value === currentPassword.value && newPassword.value !== '') {
-                message.textContent = 'Your new password cannot match with your current password';
-                message.style.color = 'red';
-                newPassword.style.borderColor = 'red';
-                submitBtn.disabled = true;
-                return;
-            } else if (newPassword.value !== confirmPassword.value && (newPassword.value !== '' && confirmPassword.value !== '')) {
+            if (newPassword.value !== confirmPassword.value && (newPassword.value !== '' && confirmPassword.value !== '')) {
                 message.textContent = 'Passwords dont match';
                 message.style.color = 'red';
                 newPassword.style.borderColor = 'red';
@@ -156,18 +140,14 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
                 message.style.color = 'green';
                 confirmPassword.style.borderColor = 'green';
                 newPassword.style.borderColor = 'green';
-                if (currentPassword.value === '' || !validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')) {
-                    submitBtn.disabled = true;
-                    message.textContent = '';
-                } else {
-                    submitBtn.disabled = false;
-                }
+
+                submitBtn.disabled = false;
+
             } else {
                 message.textContent = '';
                 message.style.color = 'black';
                 newPassword.style.borderColor = 'black';
                 confirmPassword.style.borderColor = 'black';
-                currentPassword.style.borderColor = 'black';
                 submitBtn.disabled = true;
                 return;
             }
