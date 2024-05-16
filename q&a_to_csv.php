@@ -69,7 +69,8 @@ function exportQuestionsToCSV($db, $filename) {
             // Zatvorenie súboru
             fclose($fp);
 
-            echo "Otázky boli úspešne exportované do CSV súboru: $filename" . "<br>";
+            $message = "Otázky boli úspešne exportované do CSV súboru: $filename";
+            echo '<span style="color: white;">' . $message . '</span><br>';
         } else {
             echo "Žiadne aktívne otázky na export.";
         }
@@ -134,7 +135,8 @@ function exportAnswersToCSV($db, $filename) {
             // Zatvorenie súboru
             fclose($fp);
 
-            echo "Odpovede boli úspešne exportované do CSV súboru: $filename";
+            $message = "Odpovede boli úspešne exportované do CSV súboru: $filename";
+            echo '<span style="color: white;">' . $message . '</span><br>';
         } else {
             echo "Žiadne odpovede na export.";
         }
@@ -153,3 +155,36 @@ try {
     echo "Connection error: " . $e->getMessage();
 }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WEBTE FINAL</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+<body>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        // toastr nastavenia
+        toastr.options = {
+            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+        };
+
+        <?php if (isset($_SESSION["toast_success"])) : ?>
+            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+
+            <?php unset($_SESSION["toast_success"]); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION["toast_error"])) : ?>
+            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+
+            <?php unset($_SESSION["toast_error"]); ?>
+        <?php endif; ?>
+    </script>
+</body>
+</html>
