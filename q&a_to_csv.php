@@ -80,19 +80,14 @@ function exportQuestionsToCSV($db, $filename)
             // Zatvorenie súboru
             fclose($fp);
 
-            // URL, na ktorú chcete zprávu odkázať
-            $linkUrl = 'questions.csv'; // Nahraďte vašou cieľovou URL tu
-
-            // Text odkazu
-            $linkText = "Otázky boli úspešne exportované do CSV súboru: $filename";
-
-            // Výpis s odkazom a bielou farbou textu
-            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
+            return true;
         } else {
             $_SESSION["toast_error"] = "Žiadne aktívne otázky na export.";
+            return false;
         }
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
+        return false;
     }
 }
 
@@ -153,66 +148,42 @@ function exportAnswersToCSV($db, $filename)
             // Zatvorenie súboru
             fclose($fp);
 
-            // URL, na ktorú chcete zprávu odkázať
-            $linkUrl = 'answers.csv'; // Nahraďte vašou cieľovou URL tu
-
-            // Text odkazu
-            $linkText = "Odpovede boli úspešne exportované do CSV súboru: $filename";
-
-            // Výpis s odkazom a bielou farbou textu
-            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
+            return true;
         } else {
             $_SESSION["toast_error"] = "Žiadne odpovede na export.";
+            return false;
         }
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
+        return false;
     }
 }
 
 // Použitie existujúceho pripojenia k databáze z konfiguračného súboru
 try {
     // Použitie existujúcej premennej $db z konfiguračného súboru
-    exportQuestionsToCSV($db, 'questions.csv');
-    exportAnswersToCSV($db, 'answers.csv');
-    header("Location: logged_in.php");
-    exit;
+    $exportQuestionsSuccess = exportQuestionsToCSV($db, 'questions.csv');
+    $exportAnswersSuccess = exportAnswersToCSV($db, 'answers.csv');
+
+    if ($exportQuestionsSuccess && $exportAnswersSuccess) {
+        // Both exports were successful, so concatenate the files
+        $questionsContent = file_get_contents('questions.csv');
+        $answersContent = file_get_contents('answers.csv');
+
+        // Concatenate the contents
+        $combinedContent = $questionsContent . $answersContent;
+
+        // Send headers for file download
+        header("Content-Disposition: attachment; filename=\"questions_answers.csv\"");
+        header("Content-Type: application/csv");
+
+        // Output the concatenated content
+        echo $combinedContent;
+    } else {
+        // At least one export failed
+        header("Location: logged_in.php");
+        exit;
+    }
 } catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
-?>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>WEBTE FINAL</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-</head>
-
-<body>
-
-    <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script>
-        // toastr nastavenia
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-        };
-
-        <?php if (isset($_SESSION["toast_success"])) : ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
-
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION["toast_error"])) : ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
-
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
-    </script>
-</body>
-
-</html>
