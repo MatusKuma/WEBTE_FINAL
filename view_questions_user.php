@@ -40,6 +40,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 <th>Question Title</th>
                 <th>Subject</th>
                 <th>Date Created</th>
+                <th>Code</th>
                 <th>Active</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -58,6 +59,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['code']) . "</td>";
                     echo "<td><input type='checkbox' class='isActiveCheckbox' data-id='" . $row['id'] . "' " . ($row['isActive'] ? 'checked' : '') . "></td>";
                     echo "<td><a href='edit_question_open.php?id=" . $row['id'] . "'>Edit</a></td>";
                     echo "<td><a href='#' class='delete-link' data-id='" . $row['id'] . "' data-type='open'>Delete</a></td>";
@@ -65,7 +67,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td>No Open questions found</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+                echo "<tr><td>No Open questions found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>
@@ -77,6 +79,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                 <th>Question Title</th>
                 <th>Subject</th>
                 <th>Date Created</th>
+                <th>Code</th>
                 <th>Option 1</th>
                 <th>Option 2</th>
                 <th>Option 3</th>
@@ -100,6 +103,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['code']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_1']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_2']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_3']) . "</td>";
@@ -116,7 +120,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td>No questions with options found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+                echo "<tr><td>No questions with options found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>

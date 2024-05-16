@@ -5,6 +5,7 @@ include "../.configFinal.php"; // Zabezpečte správne pripojenie k databáze
 // Získanie parametra kódu otázky z URL
 $code = $_GET['code'] ?? '';
 $questionType = $_GET['question_type'] ?? '';
+$userId = $_SESSION['user_id'];
 
 // Načítanie otázky na základe kódu a typu
 $query = $questionType === 'open' ? "SELECT * FROM questions_open WHERE code = ?" : "SELECT * FROM questions_options WHERE code = ?";
@@ -14,53 +15,59 @@ $question = $stmt->fetch();
 
 if (!$question) {
     $_SESSION["toast_error"] = "Question does not exist.";
-    header("Location: index.php");
+    header("Location: find_question.php");
+    exit;
+}
+
+// Kontrola, či je otázka aktívna
+if ($question['isActive'] == 0) {
+    $_SESSION["toast_error"] = "This question is not active.";
+    header("Location: find_question.php");
     exit;
 }
 
 $questionId = $question['id'];
 $questionTitle = $question['title'];
 $questionCode = $question['code'];
-$userId = $question['creator_id'];
+
+// Skontrolovať, či už používateľ odpovedal na otázku
+
+if($questionType === "open"){
+    $stmt = $db->prepare("SELECT COUNT(*) FROM answers_open WHERE question_id = ? AND user_id = ?");
+    $stmt->execute([$questionId, $userId]);
+    $count = $stmt->fetchColumn();
+}else{
+    $stmt = $db->prepare("SELECT COUNT(*) FROM answers_options WHERE question_id = ? AND user_id = ?");
+    $stmt->execute([$questionId, $userId]);
+    $count = $stmt->fetchColumn();
+}
+
+
+if ($count > 0) {
+    $_SESSION["toast_error"] = "Sorry, you have already submitted your answer for this question.";
+    header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType);
+    exit;
+}
 
 // Spracovanie odpovede
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['answer'])) {
     $timestamp = date("Y-m-d H:i:s");
 
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
     if ($questionType === 'open') {
-
-        $stmt = $db->prepare("SELECT COUNT(*) FROM answers_open WHERE question_id = ? AND user_id = ?");
-        $stmt->execute([$questionId, $userId]);
-        $count = $stmt->fetchColumn();
-
-        if ($count < 1) {
-            $answer = $_POST['answer'];
-            $insertStmt = $db->prepare("INSERT INTO answers_open (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
-            $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
-            $_SESSION["toast_success"] = "Your answer has been submitted.";
-        } else {
-            $_SESSION["toast_error"] = "Sorry, you have already submitted your answer for this question.";
-        }
+        $answer = $_POST['answer'];
+        $insertStmt = $db->prepare("INSERT INTO answers_open (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
+        $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
+        $_SESSION["toast_success"] = "Your answer has been submitted.";
     } else {
+        $answers = $_POST['answer'] ?? [];
+        $answersString = implode('', $answers);
+        $insertStmt = $db->prepare("INSERT INTO answers_options (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
+        $insertStmt->execute([$questionId, $answersString, $timestamp, $userId]);
 
-        $stmt = $db->prepare("SELECT COUNT(*) FROM answers_options WHERE question_id = ? AND user_id = ?");
-        $stmt->execute([$questionId, $userId]);
-        $count = $stmt->fetchColumn();
-
-        if ($count < 1) {
-            $answers = $_POST['answer'] ?? [];
-            $answersString = implode('', $answers);
-            $insertStmt = $db->prepare("INSERT INTO answers_options (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
-            $insertStmt->execute([$questionId, $answersString, $timestamp, $userId]);
-
-            $_SESSION["toast_success"] = "Your answer has been submitted.";
-        } else {
-            $_SESSION["toast_error"] = "Sorry, you have already submitted your answer for this question.";
-        }
+        $_SESSION["toast_success"] = "Your answer has been submitted.";
     }
+    header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType);
+    exit;
 }
 
 // Načítanie možností pre otázky s výberom
@@ -101,12 +108,10 @@ if ($questionType === 'options') {
                 <input type="text" id="answer" name="answer" required>
             <?php else : ?>
                 <div>
-                    <!-- TODO -> zobrazovanie spravneho poctu checkboxov -->
                     <?php foreach ($options as $index => $option) : ?>
                         <input type="checkbox" id="option<?php echo $index + 1; ?>" name="answer[]" value="<?php echo $index + 1; ?>">
                         <label for="option<?php echo $index + 1; ?>"><?php echo htmlspecialchars($option); ?></label><br>
                     <?php endforeach; ?>
-
                 </div>
             <?php endif; ?>
             <input type="submit" value="Send answer">
@@ -123,13 +128,11 @@ if ($questionType === 'options') {
 
     <?php if (isset($_SESSION["toast_success"])) : ?>
         toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
-
         <?php unset($_SESSION["toast_success"]); ?>
     <?php endif; ?>
 
     <?php if (isset($_SESSION["toast_error"])) : ?>
         toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
-
         <?php unset($_SESSION["toast_error"]); ?>
     <?php endif; ?>
 </script>
