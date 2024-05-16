@@ -29,6 +29,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
         <div class="navbar">
             <a href="add_question_admin.php">Add question</a>
             <a href="add_user.php">Add User</a>
+            <a href="find_question.php">Add User</a>
             <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
             <a href="logout.php">Log out</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
