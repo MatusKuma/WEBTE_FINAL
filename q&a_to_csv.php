@@ -70,7 +70,6 @@ function exportQuestionsToCSV($db, $filename)
             // Zatvorenie súboru
             fclose($fp);
 
-<<<<<<< HEAD
             // URL, na ktorú chcete zprávu odkázať
             $linkUrl = 'questions.csv'; // Nahraďte vašou cieľovou URL tu
 
@@ -79,11 +78,6 @@ function exportQuestionsToCSV($db, $filename)
 
             // Výpis s odkazom a bielou farbou textu
             echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
-=======
-            $message = "Otázky boli úspešne exportované do CSV súboru: $filename";
-            // // echo '<span style="color: white;">' . $message . '</span><br>';
-            $_SESSION["toast_success"] =  $message;
->>>>>>> 41ce96fd02d05c280cef1994359f4e249094e51a
         } else {
             $_SESSION["toast_error"] = "Žiadne aktívne otázky na export.";
         }
@@ -149,7 +143,6 @@ function exportAnswersToCSV($db, $filename)
             // Zatvorenie súboru
             fclose($fp);
 
-<<<<<<< HEAD
             // URL, na ktorú chcete zprávu odkázať
             $linkUrl = 'answers.csv'; // Nahraďte vašou cieľovou URL tu
 
@@ -158,11 +151,6 @@ function exportAnswersToCSV($db, $filename)
 
             // Výpis s odkazom a bielou farbou textu
             echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
-=======
-            $message = "Odpovede boli úspešne exportované do CSV súboru: $filename";
-            // echo '<span style="color: white;">' . $message . '</span><br>';
-            $_SESSION["toast_success"] .=  $message;
->>>>>>> 41ce96fd02d05c280cef1994359f4e249094e51a
         } else {
             $_SESSION["toast_error"] = "Žiadne odpovede na export.";
         }
