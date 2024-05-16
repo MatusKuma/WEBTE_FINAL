@@ -42,6 +42,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                 <th>Question Title</th>
                 <th>Subject</th>
                 <th>Date Created</th>
+                <th>Code</th>
             </tr>
         </thead>
         <tbody>
@@ -58,10 +59,11 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['code']) . "</td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No questions found for this user.</td></tr>";
+                echo "<tr><td>No questions found for this user</td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>
@@ -74,6 +76,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                 <th>Question Title</th>
                 <th>Subject</th>
                 <th>Date Created</th>
+                <th>Code</th>
                 <th>Option 1</th>
                 <th>Option 2</th>
                 <th>Option 3</th>
@@ -95,6 +98,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                     echo "<td>" . htmlspecialchars($row['title']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['code']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_1']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_2']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['option_3']) . "</td>";
@@ -107,7 +111,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td>No questions found for this user</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+                echo "<tr><td>No questions found for this user</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
             }
             ?>
         </tbody>

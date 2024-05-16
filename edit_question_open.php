@@ -21,7 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $db->prepare("UPDATE questions_open SET title = ?, isActive = ? WHERE id = ?");
     $stmt->execute([$title, $isActive, $id]);
-
+    $_SESSION["toast_success"] = "Question has been updated successfully";
+    session_write_close();
     header("Location: view_questions_user.php?user_id=" . $_SESSION['user_id']);
     exit;
 }

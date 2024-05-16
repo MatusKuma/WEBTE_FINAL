@@ -9,7 +9,8 @@ error_reporting(E_ALL);
 require_once("../.configFinal.php");
 
 // Funkcia na export otázok do CSV súboru
-function exportQuestionsToCSV($db, $filename) {
+function exportQuestionsToCSV($db, $filename)
+{
     try {
         // Overenie prítomnosti záznamov v tabuľke questions_options
         $stmtOptions = $db->prepare("SELECT COUNT(*) FROM questions_options WHERE isActive = 1");
@@ -69,6 +70,7 @@ function exportQuestionsToCSV($db, $filename) {
             // Zatvorenie súboru
             fclose($fp);
 
+<<<<<<< HEAD
             // URL, na ktorú chcete zprávu odkázať
             $linkUrl = 'questions.csv'; // Nahraďte vašou cieľovou URL tu
 
@@ -77,16 +79,22 @@ function exportQuestionsToCSV($db, $filename) {
 
             // Výpis s odkazom a bielou farbou textu
             echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
+=======
+            $message = "Otázky boli úspešne exportované do CSV súboru: $filename";
+            // // echo '<span style="color: white;">' . $message . '</span><br>';
+            $_SESSION["toast_success"] =  $message;
+>>>>>>> 41ce96fd02d05c280cef1994359f4e249094e51a
         } else {
-            echo "Žiadne aktívne otázky na export.";
+            $_SESSION["toast_error"] = "Žiadne aktívne otázky na export.";
         }
-    } catch(PDOException $e) {
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
 // Funkcia na export odpovedí do CSV súboru
-function exportAnswersToCSV($db, $filename) {
+function exportAnswersToCSV($db, $filename)
+{
     try {
         // Overenie prítomnosti záznamov v tabuľkách answers_options a answers_open
         $stmtOptions = $db->prepare("SELECT COUNT(*) FROM answers_options");
@@ -141,6 +149,7 @@ function exportAnswersToCSV($db, $filename) {
             // Zatvorenie súboru
             fclose($fp);
 
+<<<<<<< HEAD
             // URL, na ktorú chcete zprávu odkázať
             $linkUrl = 'answers.csv'; // Nahraďte vašou cieľovou URL tu
 
@@ -149,10 +158,15 @@ function exportAnswersToCSV($db, $filename) {
 
             // Výpis s odkazom a bielou farbou textu
             echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
+=======
+            $message = "Odpovede boli úspešne exportované do CSV súboru: $filename";
+            // echo '<span style="color: white;">' . $message . '</span><br>';
+            $_SESSION["toast_success"] .=  $message;
+>>>>>>> 41ce96fd02d05c280cef1994359f4e249094e51a
         } else {
-            echo "Žiadne odpovede na export.";
+            $_SESSION["toast_error"] = "Žiadne odpovede na export.";
         }
-    } catch(PDOException $e) {
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
@@ -162,19 +176,22 @@ try {
     // Použitie existujúcej premennej $db z konfiguračného súboru
     exportQuestionsToCSV($db, 'questions.csv');
     exportAnswersToCSV($db, 'answers.csv');
-
-} catch(PDOException $e) {
+    header("Location: logged_in.php");
+    exit;
+} catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>WEBTE FINAL</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
+
 <body>
 
     <script src="script.js"></script>
@@ -199,4 +216,5 @@ try {
         <?php endif; ?>
     </script>
 </body>
+
 </html>

@@ -51,6 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $timestamp = date("Y-m-d H:i:s");
 
+    $host = $_SERVER['HTTP_HOST'];
+    $baseUrl = 'https://' . $host . '/zadanieFINAL/';
+
     do {
         // vygenerovanie unikatneho 5 miestneho kodu
         $code = randString();
@@ -73,7 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         //$qrCode = new QrCode('https://node75.webte.fei.stuba.sk/zadanieFINAL/answer.php?code=' . $code . '&question_type=options');
-        $qrCode = QrCode::create('https://node75.webte.fei.stuba.sk/zadanieFINAL/answer.php?code=' . $code . '&question_type=options')
+        // $qrCode = QrCode::create('https://node75.webte.fei.stuba.sk/zadanieFINAL/answer.php?code=' . $code . '&question_type=options')
+        $qrCode = QrCode::create($baseUrl . "answer.php?code=" . $code . "&question_type=options")
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(ErrorCorrectionLevel::Low)
             ->setSize(300)
@@ -127,7 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //$qrCode = new QrCode('https://node75.webte.fei.stuba.sk/zadanieFINAL/answer.php?code=' . $code . '&question_type=open');
         // Create QR code
-        $qrCode = QrCode::create('https://node75.webte.fei.stuba.sk/zadanieFINAL/answer.php?code=' . $code . '&question_type=open')
+        // $qrCode = QrCode::create('https://node75.webte.fei.stuba.sk/zadanieFINAL/answer.php?code=' . $code . '&question_type=open')
+        $qrCode = QrCode::create($baseUrl . "answer.php?code=" . $code . "&question_type=open")
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(ErrorCorrectionLevel::Low)
             ->setSize(300)
@@ -196,7 +201,6 @@ function randString()
 
 <body>
     <div class="navigation_bar">
-        <h2>HOME</h2>
         <div class="navbar">
             <a href="find_question.php">Find question</a>
             <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
