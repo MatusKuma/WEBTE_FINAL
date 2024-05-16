@@ -69,8 +69,14 @@ function exportQuestionsToCSV($db, $filename) {
             // Zatvorenie súboru
             fclose($fp);
 
-            $message = "Otázky boli úspešne exportované do CSV súboru: $filename";
-            echo '<span style="color: white;">' . $message . '</span><br>';
+            // URL, na ktorú chcete zprávu odkázať
+            $linkUrl = 'questions.csv'; // Nahraďte vašou cieľovou URL tu
+
+            // Text odkazu
+            $linkText = "Otázky boli úspešne exportované do CSV súboru: $filename";
+
+            // Výpis s odkazom a bielou farbou textu
+            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
         } else {
             echo "Žiadne aktívne otázky na export.";
         }
@@ -135,8 +141,14 @@ function exportAnswersToCSV($db, $filename) {
             // Zatvorenie súboru
             fclose($fp);
 
-            $message = "Odpovede boli úspešne exportované do CSV súboru: $filename";
-            echo '<span style="color: white;">' . $message . '</span><br>';
+            // URL, na ktorú chcete zprávu odkázať
+            $linkUrl = 'answers.csv'; // Nahraďte vašou cieľovou URL tu
+
+            // Text odkazu
+            $linkText = "Odpovede boli úspešne exportované do CSV súboru: $filename";
+
+            // Výpis s odkazom a bielou farbou textu
+            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
         } else {
             echo "Žiadne odpovede na export.";
         }
