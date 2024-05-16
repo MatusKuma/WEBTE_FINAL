@@ -82,18 +82,7 @@ function exportQuestionsToCSV($db, $filename, $userId, $isAdmin)
             // Zatvorenie súboru
             fclose($fp);
 
-<<<<<<< HEAD
             return true;
-=======
-            // URL, na ktorú chcete zprávu odkázať
-            $linkUrl = $filename;
-
-            // Text odkazu
-            $linkText = "Otázky boli úspešne exportované do CSV súboru: $filename";
-
-            // Výpis s odkazom a bielou farbou textu
-            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
->>>>>>> 0d0cc71596c60a74225881152bac58abfa9a8ce4
         } else {
             $_SESSION["toast_error"] = "Žiadne aktívne otázky na export.";
             return false;
@@ -161,18 +150,7 @@ function exportAnswersToCSV($db, $filename, $isAdmin)
             // Zatvorenie súboru
             fclose($fp);
 
-<<<<<<< HEAD
             return true;
-=======
-            // URL, na ktorú chcete zprávu odkázať
-            $linkUrl = $filename;
-
-            // Text odkazu
-            $linkText = "Odpovede boli úspešne exportované do CSV súboru: $filename";
-
-            // Výpis s odkazom a bielou farbou textu
-            echo '<a href="' . $linkUrl . '" style="color: white;">' . $linkText . '</a><br>';
->>>>>>> 0d0cc71596c60a74225881152bac58abfa9a8ce4
         } else {
             $_SESSION["toast_error"] = "Žiadne odpovede na export.";
             return false;
@@ -183,16 +161,15 @@ function exportAnswersToCSV($db, $filename, $isAdmin)
     }
 }
 
-// Použitie existujúceho pripojenia k databáze z konfiguračného súboru
 try {
     // Získanie ID používateľa a úrovne oprávnení
     $userId = $_SESSION["user_id"];
     $isAdmin = $_SESSION['admin'];
 
+
     // Použitie existujúcej premennej $db z konfiguračného súboru
-<<<<<<< HEAD
-    $exportQuestionsSuccess = exportQuestionsToCSV($db, 'questions.csv');
-    $exportAnswersSuccess = exportAnswersToCSV($db, 'answers.csv');
+    $exportQuestionsSuccess = exportQuestionsToCSV($db, 'questions.csv', $userId, $isAdmin);
+    $exportAnswersSuccess = exportAnswersToCSV($db, 'answers.csv', $isAdmin);
 
     if ($exportQuestionsSuccess && $exportAnswersSuccess) {
         // Both exports were successful, so concatenate the files
@@ -216,49 +193,3 @@ try {
 } catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
-=======
-    exportQuestionsToCSV($db, 'questions.csv', $userId, $isAdmin);
-    exportAnswersToCSV($db, 'answers.csv', $isAdmin);
-    
-} catch (PDOException $e) {
-    echo "Connection error: " . $e->getMessage();
-}
-?>
-
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>WEBTE FINAL</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-</head>
-
-<body>
-
-    <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script>
-        // toastr nastavenia
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-        };
-
-        <?php if (isset($_SESSION["toast_success"])) : ?>
-            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
-
-            <?php unset($_SESSION["toast_success"]); ?>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION["toast_error"])) : ?>
-            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
-
-            <?php unset($_SESSION["toast_error"]); ?>
-        <?php endif; ?>
-    </script>
-</body>
-
-</html>
->>>>>>> 0d0cc71596c60a74225881152bac58abfa9a8ce4
