@@ -47,6 +47,7 @@ if ($referer) {
     curl_setopt($ch, CURLOPT_URL, $referer);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Dôsledne sleduje presmerovania
+    curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8'); // Nastavuje kódovanie na UTF-8
     $html = curl_exec($ch);
     curl_close($ch);
 
@@ -88,6 +89,10 @@ if ($referer) {
             $body .= $dom->saveHTML($next);
             $next = $next->nextSibling;
         }
+
+        // Konvertuje UTF-8 do Windows-1250 (pre slovenčinu)
+        $title = iconv('UTF-8', 'Windows-1250', $title);
+        $body = iconv('UTF-8', 'Windows-1250', $body);
 
         $pdf->PrintChapter($title, $body);
     }
