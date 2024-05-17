@@ -56,7 +56,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
                     <li>Otvorená otázka, vie zadať aký typ vyhodnocovania bude otázka obsahovať</li>
                 </ul>
             </li>
-            <li>Vie si zobraziť všetky vlastné otázky a vie nad nimi robiť tieto operácie
+            <li>Vie si zobraziť všetky vlastné otázky a vie nad nimi robiť tieto operácie:
                 <ul>
                     <li>Editácia</li>
                     <li>Duplikovanie</li>
@@ -81,7 +81,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
                     <li>Otvorená otázka, vie zadať aký typ vyhodnocovania bude otázka obsahovať</li>
                 </ul>
             </li>
-            <li>Vie si zobraziť všetkých používateľov a robiť nad nimi tieto operácie
+            <li>Vie si zobraziť všetkých používateľov a robiť nad nimi tieto operácie:
                 <ul>
                     <li>Zobrazenie všetkých otázok daného používateľa</li>
                     <li>Editácia daného používateľa</li>
