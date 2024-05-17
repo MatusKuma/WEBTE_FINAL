@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "./.configFinal.php";
+include "../.configFinal.php"; // Zabezpečte správne pripojenie k databáze
 // Získanie parametra kódu otázky z URL
 $code = $_GET['code'] ?? '';
 $questionType = $_GET['question_type'] ?? '';
@@ -31,11 +31,11 @@ $questionCode = $question['code'];
 
 // Skontrolovať, či už používateľ odpovedal na otázku
 
-if ($questionType === "open") {
+if($questionType === "open"){
     $stmt = $db->prepare("SELECT COUNT(*) FROM answers_open WHERE question_id = ? AND user_id = ?");
     $stmt->execute([$questionId, $userId]);
     $count = $stmt->fetchColumn();
-} else {
+}else{
     $stmt = $db->prepare("SELECT COUNT(*) FROM answers_options WHERE question_id = ? AND user_id = ?");
     $stmt->execute([$questionId, $userId]);
     $count = $stmt->fetchColumn();
@@ -54,12 +54,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($questionType === 'open') {
         $answers = $_POST['answer'] ?? [];
-        if (empty($answers)) {
+        if(empty($answers)){
             $_SESSION["toast_error"] = "You answer is empty";
             header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
             exit;
         }
-
+        
         $insertStmt = $db->prepare("INSERT INTO answers_open (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
         $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
         $inserted_answer_id = $db->lastInsertId();
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["toast_error"] = "Please select at least one option";
             header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
             exit;
-        } else if ($answerCount === 4) {
+        }else if ($answerCount === 4) {
             $_SESSION["toast_error"] = "You cannot select all options";
             header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
             exit;
@@ -83,12 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inserted_answer_id = $db->lastInsertId();
         $_SESSION["toast_success"] = "Your answer has been submitted.";
     }
-    if ($userId === 0) {
+    if($userId === 0){
         header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType . "&answer_id=" . $inserted_answer_id);
         exit;
     }
     header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType);
     exit;
+    
 }
 
 // Načítanie možností pre otázky s výberom
@@ -115,8 +116,8 @@ if ($questionType === 'options') {
             <a href="find_question.php">Find question</a>
             <a href="logged_in.php">Home</a>
             <?php if (isset($_SESSION["username"])) : ?>
-            <a href="logout.php">Log out</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
+                <a href="logout.php">Log out</a>
+                <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
             <?php endif; ?>
         </div>
     </div>
@@ -124,20 +125,17 @@ if ($questionType === 'options') {
     <div class="main-wrapper">
         <h1><?php echo "Question Code: " . htmlspecialchars($questionCode); ?></h1>
         <h1><?php echo htmlspecialchars($questionTitle); ?></h1>
-        <form
-            action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?code=" . $code . "&question_type=" . $questionType); ?>"
-            method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?code=" . $code . "&question_type=" . $questionType); ?>" method="post">
             <?php if ($questionType === 'open') : ?>
-            <label for="answer">Your answer</label>
-            <input type="text" id="answer" name="answer" required>
+                <label for="answer">Your answer</label>
+                <input type="text" id="answer" name="answer" required>
             <?php else : ?>
-            <div>
-                <?php foreach ($options as $index => $option) : ?>
-                <input type="checkbox" id="option<?php echo $index + 1; ?>" name="answer[]"
-                    value="<?php echo $index + 1; ?>">
-                <label for="option<?php echo $index + 1; ?>"><?php echo htmlspecialchars($option); ?></label><br>
-                <?php endforeach; ?>
-            </div>
+                <div>
+                    <?php foreach ($options as $index => $option) : ?>
+                        <input type="checkbox" id="option<?php echo $index + 1; ?>" name="answer[]" value="<?php echo $index + 1; ?>">
+                        <label for="option<?php echo $index + 1; ?>"><?php echo htmlspecialchars($option); ?></label><br>
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
             <input type="submit" value="Send answer">
         </form>
@@ -147,19 +145,19 @@ if ($questionType === 'options') {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script>
-toastr.options = {
-    "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-};
+    toastr.options = {
+        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+    };
 
-<?php if (isset($_SESSION["toast_success"])) : ?>
-toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
-<?php unset($_SESSION["toast_success"]); ?>
-<?php endif; ?>
+    <?php if (isset($_SESSION["toast_success"])) : ?>
+        toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+        <?php unset($_SESSION["toast_success"]); ?>
+    <?php endif; ?>
 
-<?php if (isset($_SESSION["toast_error"])) : ?>
-toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
-<?php unset($_SESSION["toast_error"]); ?>
-<?php endif; ?>
+    <?php if (isset($_SESSION["toast_error"])) : ?>
+        toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+        <?php unset($_SESSION["toast_error"]); ?>
+    <?php endif; ?>
 </script>
 
 </html>

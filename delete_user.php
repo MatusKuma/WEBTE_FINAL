@@ -1,6 +1,7 @@
+
 <?php
 session_start();
-include "./.configFinal.php";
+include "../.configFinal.php"; // Zahrnutie databázového pripojenia
 
 // Kontrola prihlásenia a oprávnení
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
