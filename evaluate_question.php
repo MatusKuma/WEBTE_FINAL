@@ -25,7 +25,7 @@ $questionId = $question['id'];
 $questionTitle = $question['title'];
 $questionCode = $question['code'];
 $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
-if($userId === 0){
+if ($userId === 0) {
     $answer_id = $_GET["answer_id"];
 }
 // Načítanie odpovedí používateľa
@@ -41,8 +41,7 @@ if ($userId !== 0) {
         $userAnswer = $stmt->fetchColumn();
         $userAnswerArray = str_split($userAnswer);
     }
-}
-else{
+} else {
     if ($questionType === 'open') {
         $stmt = $db->prepare("SELECT answer FROM answers_open WHERE id = ?");
         $stmt->execute([$answer_id]);
@@ -91,6 +90,8 @@ if ($questionType === 'options') {
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Question Evaluation</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
@@ -121,7 +122,7 @@ if ($questionType === 'options') {
         <div class="navbar">
             <a href="find_question.php">Find question</a>
             <a href="logged_in.php">Home</a>
-            <?php if (isset($_SESSION["username"])): ?>
+            <?php if (isset($_SESSION["username"])) : ?>
                 <a href="logout.php">Log out</a>
                 <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
             <?php endif; ?>
@@ -132,8 +133,8 @@ if ($questionType === 'options') {
         <h1><?php echo "Question Code: " . htmlspecialchars($questionCode); ?></h1>
         <h1><?php echo htmlspecialchars($questionTitle); ?></h1>
 
-        <?php if ($questionType === 'open'): ?>
-            <?php if ($questionEvalType === 'list'): ?>
+        <?php if ($questionType === 'open') : ?>
+            <?php if ($questionEvalType === 'list') : ?>
                 <h2>Answers Statistics</h2>
                 <table id="answerTable" class="display">
                     <thead>
@@ -143,7 +144,7 @@ if ($questionType === 'options') {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($answerCounts as $row): ?>
+                        <?php foreach ($answerCounts as $row) : ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($row['answer']); ?></td>
                                 <td><?php echo $row['count']; ?></td>
@@ -151,14 +152,16 @@ if ($questionType === 'options') {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            <?php else: ?>
+            <?php else : ?>
                 <div id="wordcloud" class="word-cloud"></div>
                 <script>
                     var answers = <?php echo json_encode($answerCounts); ?>;
                     var container = document.getElementById('wordcloud');
-                    var maxCount = Math.max.apply(Math, answers.map(function (o) { return o.count; }));
+                    var maxCount = Math.max.apply(Math, answers.map(function(o) {
+                        return o.count;
+                    }));
 
-                    answers.forEach(function (answer) {
+                    answers.forEach(function(answer) {
                         var span = document.createElement('span');
                         span.textContent = answer.answer;
                         var size = (answer.count / maxCount) * 40 + 10; // Scale font size based on max count
@@ -169,7 +172,7 @@ if ($questionType === 'options') {
             <?php endif; ?>
             <h2>Your Answer</h2>
             <p class="user-answer"><?php echo htmlspecialchars($userAnswer); ?></p>
-        <?php else: ?>
+        <?php else : ?>
             <h2>Answer Statistics</h2>
             <table>
                 <thead>
@@ -180,7 +183,7 @@ if ($questionType === 'options') {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php for ($i = 1; $i <= 4; $i++): ?>
+                    <?php for ($i = 1; $i <= 4; $i++) : ?>
                         <tr>
                             <td><?php echo $i; ?></td>
                             <td class="<?php echo in_array($i, $correctAnswers) ? 'correct-answer' : 'incorrect-answer'; ?>">
@@ -193,7 +196,7 @@ if ($questionType === 'options') {
             </table>
             <h2>Your Answer</h2>
             <ul class="user-answer">
-                <?php foreach ($userAnswerArray as $answer): ?>
+                <?php foreach ($userAnswerArray as $answer) : ?>
                     <li class="<?php echo in_array($answer, $correctAnswers) ? 'correct-answer' : 'incorrect-answer'; ?>">
                         <?php echo htmlspecialchars($question["option_$answer"]); ?>
                     </li>
@@ -210,18 +213,18 @@ if ($questionType === 'options') {
             "positionClass": "toast-top-right", // tu sa meni pozicia toastr
         };
 
-        <?php if (isset($_SESSION["toast_success"])): ?>
+        <?php if (isset($_SESSION["toast_success"])) : ?>
             toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
 
             <?php unset($_SESSION["toast_success"]); ?>
         <?php endif; ?>
 
-        <?php if (isset($_SESSION["toast_error"])): ?>
+        <?php if (isset($_SESSION["toast_error"])) : ?>
             toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
 
             <?php unset($_SESSION["toast_error"]); ?>
         <?php endif; ?>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#answerTable').DataTable();
         });
     </script>

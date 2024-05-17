@@ -76,6 +76,8 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Change Password</title>
     <link rel="stylesheet" href="style.css">
 
@@ -96,22 +98,20 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
         <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
         <div>
             <label>New Password:</label>
-            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$"
-                oninput="validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')">
+            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$" oninput="validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')">
             <span class="error-msg" id="error-newPassword"><?php if (isset($error_newPassword)) {
-                echo $error_newPassword;
-            } ?></span>
+                                                                echo $error_newPassword;
+                                                            } ?></span>
         </div>
         <div>
             <label>Confirm New Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required
-                oninput="validatePasswords();">
+            <input type="password" id="confirm_password" name="confirm_password" required oninput="validatePasswords();">
             <span class="error-msg" id="error-confirmPassword"><?php if (isset($error_confirmPassword)) {
-                echo $error_confirmPassword;
-            } ?></span>
+                                                                    echo $error_confirmPassword;
+                                                                } ?></span>
             <p id="message" style="color: red"><?php if (isset($error_message) && !empty($error_message)) {
-                echo $error_message;
-            } ?></p>
+                                                    echo $error_message;
+                                                } ?></p>
         </div>
         <div>
             <input type="submit" id="submit_btn" value="Change Password" disabled>
