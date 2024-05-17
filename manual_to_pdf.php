@@ -40,14 +40,29 @@ class PDF extends FPDF
     }
 }
 
+function FormatListItems($text)
+{
+    // Prvotná úprava textu na odstránenie prebytočných bielych znakov
+    $text = preg_replace('/\s+/', ' ', $text);
+    $text = preg_replace('/\s?<li>\s?/', "\n- ", $text);
+    $text = preg_replace('/\s?<\/li>\s?/', "\n", $text);
+    $text = preg_replace('/\s?<ul>\s?/', "\n", $text);
+    $text = preg_replace('/\s?<\/ul>\s?/', "\n", $text);
+
+    // Odstránenie všetkých ostatných HTML tagov
+    $text = strip_tags($text);
+
+    return $text;
+}
+
 $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 
 if ($referer) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $referer);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Dôsledne sleduje presmerovania
-    curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8'); // Nastavuje kódovanie na UTF-8
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
     $html = curl_exec($ch);
     curl_close($ch);
 
@@ -57,10 +72,10 @@ if ($referer) {
 
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
-    if (!$dom->loadHTML('<?xml encoding="UTF-8">' . $html)) { // pridajte deklaráciu kódovania do HTML
+    if (!$dom->loadHTML('<?xml encoding="UTF-8">' . $html)) {
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            echo "Libxml error: " . $error->message . "<br>"; // Debug: zobraz libxml chyby
+            echo "Libxml error: " . $error->message . "<br>";
         }
         libxml_clear_errors();
         exit("Error loading HTML content.");
@@ -86,18 +101,22 @@ if ($referer) {
         $body = '';
         $next = $section->nextSibling;
         while ($next && $next->nodeName !== 'h2') {
-            $body .= $dom->saveHTML($next);
+            if ($next->nodeName == 'ul') {
+                $body .= FormatListItems($dom->saveHTML($next));
+            } else {
+                $body .= $dom->saveHTML($next);
+            }
             $next = $next->nextSibling;
         }
 
-        // Konvertuje UTF-8 do Windows-1250 (pre slovenčinu)
-        $title = iconv('UTF-8', 'Windows-1250', $title);
-        $body = iconv('UTF-8', 'Windows-1250', $body);
+        // Priame použitie UTF-8 bez konverzie
+        $title = utf8_decode($title);
+        $body = utf8_decode($body);
 
         $pdf->PrintChapter($title, $body);
     }
 
-    $pdf->Output('manual.pdf', 'I'); // Output PDF to browser
+    $pdf->Output('manual.pdf', 'I');
 } else {
     exit("No referrer URL found.");
 }
