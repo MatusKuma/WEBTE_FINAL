@@ -1,3 +1,6 @@
+* {
+    font-family: Arial;
+}
 .navigation_bar {
     display: flex;
     flex-direction: row;
