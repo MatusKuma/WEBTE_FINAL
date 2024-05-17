@@ -1,5 +1,5 @@
 <?php
-require('fpdf.php');
+require('fpdf/fpdf.php');
 
 class PDF extends FPDF
 {
@@ -43,56 +43,56 @@ class PDF extends FPDF
 $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 
 if ($referer) {
-    echo "Referer: " . $referer . "<br>"; // Debug: zobraz referer URL
-
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $referer);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Dôsledne sleduje presmerovania
     $html = curl_exec($ch);
-    $curl_error = curl_error($ch); // Debug: získať cURL chyby
     curl_close($ch);
 
     if ($html === false) {
-        echo "cURL Error: " . $curl_error . "<br>"; // Debug: zobraziť cURL chyby
         exit("Error fetching the page.");
-    }
-
-    if (empty($html)) {
-        exit("Error: Empty HTML content."); // Debug: skontrolovať prázdny obsah
     }
 
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
-    if (!$dom->loadHTML($html)) {
+    if (!$dom->loadHTML('<?xml encoding="UTF-8">' . $html)) { // pridajte deklaráciu kódovania do HTML
+        $errors = libxml_get_errors();
+        foreach ($errors as $error) {
+            echo "Libxml error: " . $error->message . "<br>"; // Debug: zobraz libxml chyby
+        }
         libxml_clear_errors();
         exit("Error loading HTML content.");
     }
     libxml_clear_errors();
     
-    $xpath = new DOMXPath($dom);
-    $node = $xpath->query('//*[@id="manual"]')->item(0);
+    $manual = $dom->getElementById('manual');
 
-    if (!$node) {
+    if (!$manual) {
         exit("Error: Manual content not found.");
     }
 
-    $manual_content = $dom->saveHTML($node);
-    $manual_content_clean = strip_tags($manual_content, '<h2><ul><li>');
+    $sections = $manual->getElementsByTagName('h2');
 
-    $sections = explode('<h2>', $manual_content_clean);
-    array_shift($sections);
+    if (empty($sections)) {
+        exit("Error: No sections found in the manual content.");
+    }
 
     $pdf = new PDF();
 
     foreach ($sections as $section) {
-        $parts = explode('</h2>', $section);
-        $title = trim($parts[0]);
-        $body = trim($parts[1]);
+        $title = $section->nodeValue;
+        $body = '';
+        $next = $section->nextSibling;
+        while ($next && $next->nodeName !== 'h2') {
+            $body .= $dom->saveHTML($next);
+            $next = $next->nextSibling;
+        }
+
         $pdf->PrintChapter($title, $body);
     }
 
-    $pdf->Output();
+    $pdf->Output('manual.pdf', 'I'); // Output PDF to browser
 } else {
     exit("No referrer URL found.");
 }
