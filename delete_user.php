@@ -30,7 +30,11 @@ if (!isset($_GET['user_id'])) {
         header("location: admin.php");
         exit;
     }
-
+    
+    $stmt = $db->prepare("DELETE FROM questions_open WHERE creator_id = ?");
+    $stmt->execute([$user_id]);
+    $stmt = $db->prepare("DELETE FROM questions_options WHERE creator_id = ?");
+    $stmt->execute([$user_id]);
     $stmt = $db->prepare("DELETE FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
 

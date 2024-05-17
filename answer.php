@@ -31,11 +31,11 @@ $questionCode = $question['code'];
 
 // Skontrolovať, či už používateľ odpovedal na otázku
 
-if($questionType === "open"){
+if ($questionType === "open") {
     $stmt = $db->prepare("SELECT COUNT(*) FROM answers_open WHERE question_id = ? AND user_id = ?");
     $stmt->execute([$questionId, $userId]);
     $count = $stmt->fetchColumn();
-}else{
+} else {
     $stmt = $db->prepare("SELECT COUNT(*) FROM answers_options WHERE question_id = ? AND user_id = ?");
     $stmt->execute([$questionId, $userId]);
     $count = $stmt->fetchColumn();
@@ -54,12 +54,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($questionType === 'open') {
         $answers = $_POST['answer'] ?? [];
-        if(empty($answers)){
+        if (empty($answers)) {
             $_SESSION["toast_error"] = "You answer is empty";
             header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
             exit;
         }
-        
+
         $insertStmt = $db->prepare("INSERT INTO answers_open (question_id, answer, timestamp, user_id) VALUES (?, ?, ?, ?)");
         $insertStmt->execute([$questionId, $answer, $timestamp, $userId]);
         $inserted_answer_id = $db->lastInsertId();
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["toast_error"] = "Please select at least one option";
             header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
             exit;
-        }else if ($answerCount === 4) {
+        } else if ($answerCount === 4) {
             $_SESSION["toast_error"] = "You cannot select all options";
             header("Location: answer.php?code=" . $code . "&question_type=" . $questionType);
             exit;
@@ -83,13 +83,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inserted_answer_id = $db->lastInsertId();
         $_SESSION["toast_success"] = "Your answer has been submitted.";
     }
-    if($userId === 0){
+    if ($userId === 0) {
         header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType . "&answer_id=" . $inserted_answer_id);
         exit;
     }
     header("Location: evaluate_question.php?code=" . $code . "&question_type=" . $questionType);
     exit;
-    
 }
 
 // Načítanie možností pre otázky s výberom
@@ -104,6 +103,8 @@ if ($questionType === 'options') {
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Answer</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
