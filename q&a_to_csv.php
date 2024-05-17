@@ -46,9 +46,16 @@ function exportQuestionsToCSV($db, $filename, $userId, $isAdmin)
                 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach ($questions as $question) {
+                    // Check if there are multiple correct answers
+                    $correctAnswerString = $question['correct_answer'];
+                    $correctAnswers = str_split($correctAnswerString);
+            
+                    // Join correct answers with space
+                    $correctAnswersString = implode(' ', $correctAnswers);
+            
                     fputcsv($fp, array(
                         $question['title'],
-                        $question['correct_answer'],
+                        $correctAnswersString, // Correct answer with space between multiple correct answers
                         $question['option_1'],
                         $question['option_2'],
                         $question['option_3'],
