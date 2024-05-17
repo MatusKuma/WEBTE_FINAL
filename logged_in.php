@@ -28,12 +28,13 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
             <a href="add_question_user.php">Add question</a>
             <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
             <a href="q&a_to_csv.php">Export Q&A</a>
+            <a href="manual_to_pdf.php">Export Manual</a>
             <a href="logout.php">Log out</a>
             <a href=<?php echo "change_password.php?user_id=" . $_SESSION["user_id"] ?>>Change Password</a>
             <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
         </div>
     </div>
-    <div class="manual">
+    <div id="manual" class="manual">
             <h2>Neprihlásený používateľ</h2>
             <ul>
                 <li>Sa dokáže registrovať sa a prihlásiť do systému po vykliknutí daného linku v navigácií</li>

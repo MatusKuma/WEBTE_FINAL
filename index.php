@@ -16,9 +16,10 @@
                 <a href="find_question.php">Find question</a>
                 <a href="login.php">Login</a>
                 <a href="register.php">Register</a>
+                <a href="manual_to_pdf.php">Export Manual</a>
             </div>
         </div>
-        <div class="manual">
+        <div id="manual" class="manual">
             <h2>Neprihlásený používateľ</h2>
             <ul>
                 <li>Sa dokáže registrovať sa a prihlásiť do systému po vykliknutí daného linku v navigácií</li>
