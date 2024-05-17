@@ -1,5 +1,5 @@
 <?php
-include "./.configFinal.php";
+include "../.configFinal.php";
 
 session_start();
 
@@ -73,27 +73,27 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('#userTable').DataTable();
-    });
+        $(document).ready(function() {
+            $('#userTable').DataTable();
+        });
 
 
-    // toastr nastavenia
-    toastr.options = {
-        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
-    };
+        // toastr nastavenia
+        toastr.options = {
+            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+        };
 
-    <?php if (isset($_SESSION["toast_success"])) : ?>
-    toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
+        <?php if (isset($_SESSION["toast_success"])) : ?>
+            toastr.success('<?php echo $_SESSION["toast_success"]; ?>');
 
-    <?php unset($_SESSION["toast_success"]); ?>
-    <?php endif; ?>
+            <?php unset($_SESSION["toast_success"]); ?>
+        <?php endif; ?>
 
-    <?php if (isset($_SESSION["toast_error"])) : ?>
-    toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
+        <?php if (isset($_SESSION["toast_error"])) : ?>
+            toastr.error('<?php echo $_SESSION["toast_error"]; ?>');
 
-    <?php unset($_SESSION["toast_error"]); ?>
-    <?php endif; ?>
+            <?php unset($_SESSION["toast_error"]); ?>
+        <?php endif; ?>
     </script>
     <script src="script.js"></script>
 </body>
