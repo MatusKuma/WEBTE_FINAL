@@ -35,13 +35,13 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <h2>Neprihlásený používateľ</h2>
         <ul>
             <li>Sa dokáže registrovať sa a prihlásiť do systému po vykliknutí daného linku v navigácií</li>
-            <li>Vie vyhladať otázku 3. spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
+            <li>Vie vyhladať otázku 3 spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
                 5-miestneho kódu</li>
             <li>Vie exportovať príručku do PDF</li>
         </ul>
         <h2>Prihlásený používateľ</h2>
         <ul>
-            <li>Vie vyhladať otázku 3. spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
+            <li>Vie vyhladať otázku 3 spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
                 5-miestneho kódu</li>
             <li>Dokáže pridať 2 typy otázok:
                 <ul>
@@ -65,7 +65,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         </ul>
         <h2>Admin</h2>
         <ul>
-            <li>Vie vyhladať otázku 3. spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
+            <li>Vie vyhladať otázku 3 spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
                 5-miestneho kódu</li>
             <li>Dokáže špecifikovať v koho mene vytvára otázku</li>
             <li>Dokáže pridať 2 typy otázok:
