@@ -94,7 +94,7 @@ function exportQuestionsToCSV($db, $filename, $userId, $isAdmin)
 }
 
 // Funkcia na export odpovedí do CSV súboru
-function exportAnswersToCSV($db, $filename, $isAdmin)
+function exportAnswersToCSV($db, $filename, $userId, $isAdmin)
 {
     try {
         // Overenie prítomnosti záznamov v tabuľkách answers_options a answers_open
@@ -115,14 +115,21 @@ function exportAnswersToCSV($db, $filename, $isAdmin)
 
             // Export odpovedí z tabuľky answers_options
             if ($countOptions > 0) {
-                $stmt = $db->prepare("SELECT * FROM answers_options");
+                $stmt = $db->prepare("SELECT ao.*, qo.option_1, qo.option_2, qo.option_3, qo.option_4 
+                                      FROM answers_options ao
+                                      JOIN questions_options qo ON ao.question_id = qo.id");
                 $stmt->execute();
                 $answers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach ($answers as $answer) {
+                    $answerStr = '';
+                    $answerArr = str_split($answer['answer']);
+                    foreach ($answerArr as $ans) {
+                        $answerStr .= $answer['option_' . $ans] . ' ';
+                    }
                     fputcsv($fp, array(
                         $answer['question_id'],
-                        $answer['answer'],
+                        trim($answerStr),
                         $answer['timestamp'],
                         $answer['user_id'],
                         'options'
@@ -166,10 +173,9 @@ try {
     $userId = $_SESSION["user_id"];
     $isAdmin = $_SESSION['admin'];
 
-
     // Použitie existujúcej premennej $db z konfiguračného súboru
     $exportQuestionsSuccess = exportQuestionsToCSV($db, 'questions.csv', $userId, $isAdmin);
-    $exportAnswersSuccess = exportAnswersToCSV($db, 'answers.csv', $isAdmin);
+    $exportAnswersSuccess = exportAnswersToCSV($db, 'answers.csv', $userId, $isAdmin);
 
     if ($exportQuestionsSuccess && $exportAnswersSuccess) {
         // Both exports were successful, so concatenate the files
@@ -193,3 +199,4 @@ try {
 } catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
+?>
