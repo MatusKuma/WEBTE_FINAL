@@ -40,6 +40,17 @@ class PDF extends FPDF
     }
 }
 
+function RemoveDiacritics($text)
+{
+    $diacritics = array(
+        'ľ' => 'l', 'š' => 's', 'č' => 'c', 'ť' => 't', 'ž' => 'z', 'ý' => 'y', 'á' => 'a', 'í' => 'i', 'é' => 'e',
+        'ä' => 'a', 'ô' => 'o', 'ň' => 'n', 'ď' => 'd', 'Ľ' => 'L', 'Š' => 'S', 'Č' => 'C', 'Ť' => 'T', 'Ž' => 'Z',
+        'Ý' => 'Y', 'Á' => 'A', 'Í' => 'I', 'É' => 'E', 'Ä' => 'A', 'Ô' => 'O', 'Ň' => 'N', 'Ď' => 'D'
+    );
+
+    return strtr($text, $diacritics);
+}
+
 function FormatListItems($text)
 {
     // Prvotná úprava textu na odstránenie prebytočných bielych znakov
@@ -51,6 +62,9 @@ function FormatListItems($text)
 
     // Odstránenie všetkých ostatných HTML tagov
     $text = strip_tags($text);
+
+    // Odstránenie diakritiky
+    $text = RemoveDiacritics($text);
 
     return $text;
 }
@@ -109,9 +123,9 @@ if ($referer) {
             $next = $next->nextSibling;
         }
 
-        // Priame použitie UTF-8 bez konverzie
-        $title = utf8_decode($title);
-        $body = utf8_decode($body);
+        // Priame použitie UTF-8 bez konverzie a odstránenie diakritiky
+        $title = utf8_decode(RemoveDiacritics($title));
+        $body = utf8_decode(RemoveDiacritics($body));
 
         $pdf->PrintChapter($title, $body);
     }
