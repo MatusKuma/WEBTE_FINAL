@@ -1,7 +1,7 @@
 <?php
 $servername = "mysql";
-$username = "";
-$password = "";
+$username = "xmasart";
+$password = "timo-matus-123";
 $dbname = "webte_final_db";
 
 try {
