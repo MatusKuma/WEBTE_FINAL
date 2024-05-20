@@ -179,11 +179,6 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
             ?>
 
         </tbody>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     </table>
 
 
