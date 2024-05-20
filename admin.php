@@ -21,6 +21,7 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -153,6 +154,28 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     </nav>
 <br><br>
     <table id="userTable" class="display responsive nowrap text-center" style="width:100%">
+=======
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+</head>
+
+<body>
+    <div class="navigation_bar">
+        <div class="navbar">
+            <a href="add_question_admin.php">Add question</a>
+            <a href="add_user.php">Add User</a>
+            <a href="find_question.php">Add User</a>
+            <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
+            <a href="q&a_to_csv.php">Export Q&A</a>
+            <a href="logout.php">Log out</a>
+            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
+        </div>
+    </div>
+
+    <table id="userTable" class="display">
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         <thead>
             <th></th>
             <th></th>
@@ -179,12 +202,18 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
             ?>
 
         </tbody>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     </table>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<<<<<<< HEAD
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
@@ -192,12 +221,21 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
             responsive: true,
             scrollX: true
         });;
+=======
+    <script>
+        $(document).ready(function() {
+            $('#userTable').DataTable();
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         });
 
 
         // toastr nastavenia
         toastr.options = {
+<<<<<<< HEAD
             "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
+=======
+            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         };
 
         <?php if (isset($_SESSION["toast_success"])) : ?>

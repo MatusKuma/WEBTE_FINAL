@@ -1,6 +1,9 @@
 <?php
 session_start();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 include "../.configFinal.php"; // Zabezpečte správne pripojenie k databáze
 // Získanie parametra kódu otázky z URL
 $code = $_GET['code'] ?? '';
@@ -107,6 +110,7 @@ if ($questionType === 'options') {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Answer</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -340,14 +344,57 @@ if ($questionType === 'options') {
         </form>
     </div>
 
+=======
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+
+<body>
+    <div class="navigation_bar">
+        <div class="navbar">
+            <a href="find_question.php">Find question</a>
+            <a href="logged_in.php">Home</a>
+            <?php if (isset($_SESSION["username"])) : ?>
+                <a href="logout.php">Log out</a>
+                <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <h1><?php echo "Question Code: " . htmlspecialchars($questionCode); ?></h1>
+        <h1><?php echo htmlspecialchars($questionTitle); ?></h1>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . "?code=" . $code . "&question_type=" . $questionType); ?>" method="post">
+            <?php if ($questionType === 'open') : ?>
+                <label for="answer">Your answer</label>
+                <input type="text" id="answer" name="answer" required>
+            <?php else : ?>
+                <div>
+                    <?php foreach ($options as $index => $option) : ?>
+                        <input type="checkbox" id="option<?php echo $index + 1; ?>" name="answer[]" value="<?php echo $index + 1; ?>">
+                        <label for="option<?php echo $index + 1; ?>"><?php echo htmlspecialchars($option); ?></label><br>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            <input type="submit" value="Send answer">
+        </form>
+    </div>
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<<<<<<< HEAD
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
     toastr.options = {
         "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
+=======
+<script>
+    toastr.options = {
+        "positionClass": "toast-top-right", // tu sa meni pozicia toastr
+>>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     };
 
     <?php if (isset($_SESSION["toast_success"])) : ?>
