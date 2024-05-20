@@ -79,7 +79,6 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Change Password</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -281,46 +280,6 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
     </form>
 </div>
 
-=======
-    <link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-    <div class="navigation_bar">
-        <h2>Change Password</h2>
-        <div class="navbar">
-            <a href="admin.php">Home</a>
-            <a href="logout.php">Log out</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-        </div>
-    </div>
-
-
-    <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
-        <div>
-            <label>New Password:</label>
-            <input type="password" id="new_password" name="new_password" required pattern="^.{5,100}$" oninput="validateInput('Please enter new Password!', 'min-5, max-100', 'new_password', 'error-newPassword')">
-            <span class="error-msg" id="error-newPassword"><?php if (isset($error_newPassword)) {
-                                                                echo $error_newPassword;
-                                                            } ?></span>
-        </div>
-        <div>
-            <label>Confirm New Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required oninput="validatePasswords();">
-            <span class="error-msg" id="error-confirmPassword"><?php if (isset($error_confirmPassword)) {
-                                                                    echo $error_confirmPassword;
-                                                                } ?></span>
-            <p id="message" style="color: red"><?php if (isset($error_message) && !empty($error_message)) {
-                                                    echo $error_message;
-                                                } ?></p>
-        </div>
-        <div>
-            <input type="submit" id="submit_btn" value="Change Password" disabled>
-        </div>
-    </form>
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     <script>
         function validatePasswords() {
             var newPassword = document.getElementById('new_password');
@@ -358,13 +317,10 @@ $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
         }
     </script>
     <script src="script.js"></script>
-<<<<<<< HEAD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
  
-=======
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 </body>
 
 </html>

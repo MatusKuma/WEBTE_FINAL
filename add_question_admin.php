@@ -291,7 +291,6 @@ function randString()
 </head>
 
 <body>
-<<<<<<< HEAD
 
 <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
@@ -417,67 +416,6 @@ function randString()
     </form>
 </div>
 
-=======
-    <div class="navigation_bar">
-        <div class="navbar">
-            <a href="add_user.php">Add User</a>
-            <a href="admin.php">Home</a>
-            <a href="logout.php">Log out</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-        </div>
-    </div>
-
-    <div class="form-wrapper">
-        <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" onsubmit="validateForm();">
-            <input type="radio" name="option" id="option1" value="option1" <?php if (!isset($_POST['option']) || $_POST['option'] === 'option1')
-                                                                                echo 'checked'; ?>>
-            <label for="option1">Otázka s výberom</label>
-            <input type="radio" name="option" id="option2" value="option2" <?php if (isset($_POST['option']) && $_POST['option'] === 'option2')
-                                                                                echo 'checked'; ?>>
-            <label for="option2">Otvorená otázka</label><br><br>
-            <label for="userSelect">User</label>
-            <select name="userSelect">
-                <?php
-                $stmt = $db->prepare("SELECT * FROM users");
-                $stmt->execute();
-                if ($stmt->rowCount() > 0) {
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<option value='" . $row['id'] . "'>" . $row['username'] . "</option>";
-                    }
-                }
-                ?>
-
-            </select><br>
-            <div id="eval_type" class="<?php if (!isset($_POST['option']) || $_POST['option'] === 'option1')
-                                            echo 'hidden'; ?>">
-                <label>Evaluation Type:</label><br>
-                <select name="eval_type_select" id="eval_type_select">
-                    <option value="wordcloud">Word Cloud</option>
-                    <option value="list">Unordered List</option>
-                </select>
-
-            </div>
-            <label for="title">Title:</label><br>
-            <input type="text" id="title" name="title" required minlength="5" maxlength="100"><br>
-            <div id="answers" class="<?php if (!isset($_POST['option']) || $_POST['option'] === 'option2')
-                                            echo 'hidden'; ?>">
-                <label>Answers:</label><br>
-                <input type="text" name="answer1" placeholder="Answer 1" maxlength="100">
-                <input type="checkbox" value="1" name="correct1"> Correct<br>
-                <input type="text" name="answer2" placeholder="Answer 2" maxlength="100">
-                <input type="checkbox" value="1" name="correct2"> Correct<br>
-                <input type="text" name="answer3" placeholder="Answer 3" maxlength="100">
-                <input type="checkbox" value="1" name="correct3"> Correct<br>
-                <input type="text" name="answer4" placeholder="Answer 4" maxlength="100">
-                <input type="checkbox" value="1" name="correct4"> Correct<br><br>
-            </div>
-            <label for="subject">Subject:</label><br>
-            <input type="text" id="subject" name="subject" required minlength="3" maxlength="50"><br><br>
-            <input type="submit" value="Submit">
-            <div id="error-message"><?php echo $error; ?></div>
-        </form>
-    </div>
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             updateFormVisibility();
@@ -525,7 +463,6 @@ function randString()
             }
             return true;
         }
-<<<<<<< HEAD
 
         toastr.options = {
             "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
@@ -547,9 +484,6 @@ function randString()
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
  
-=======
-    </script>
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 </body>
 
 </html>

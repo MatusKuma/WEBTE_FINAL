@@ -36,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['code'])) {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Zadaj Kód</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,46 +161,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['code'])) {
                 <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
         </form>
-=======
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-</head>
-
-<body>
-    <div class="navigation_bar">
-        <div class="navbar">
-            <a href="logged_in.php">Home</a>
-            <?php if (isset($_SESSION["username"])) : ?>
-                <a href="logout.php">Log out</a>
-                <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-            <?php endif; ?>
-        </div>
-    </div>
-    <div class="form-wrapper">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-            <label for="code">Question Code</label>
-            <input type="text" id="code" name="code" required>
-            <input type="submit" value="Find question">
-        </form>
-        <!-- <?php if ($error) : ?>
-            <div class="error-message"><?php echo $error; ?></div>
-        <?php endif; ?> -->
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<<<<<<< HEAD
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         toastr.options = {
             "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
-=======
-    <script>
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         };
 
         <?php if (isset($_SESSION["toast_success"])) : ?>

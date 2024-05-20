@@ -20,7 +20,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>View Questions</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -256,26 +255,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     <br>
     <h2 class="mb-3 text-center">Open Questions</h2>
     <table id="questionTableOpen" class="display responsive nowrap text-center" style="width:100%">
-=======
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-</head>
-
-<body>
-    <div class="navigation_bar">
-        <div class="navbar">
-            <a href="find_question.php">Find question</a>
-            <a href="add_question_user.php">Add question</a>
-            <a href="logged_in.php">Home</a>
-            <a href="logout.php">Log out</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-        </div>
-    </div>
-    <h1>User Questions</h1>
-    <h2>Open Questions</h2>
-    <table id="questionTableOpen" class="display">
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         <thead>
             <tr>
                 <th>Question Title</th>
@@ -313,13 +292,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
             ?>
         </tbody>
     </table>
-<<<<<<< HEAD
     <h2 class="mb-3 text-center">Questions with Options</h2>
     <table id="questionTableOption" class="display responsive nowrap text-center" style="width:100%">
-=======
-    <h2>Questions with Options</h2>
-    <table id="questionTableOption" class="display">
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         <thead>
             <tr>
                 <th>Question Title</th>
@@ -374,7 +348,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<<<<<<< HEAD
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
@@ -387,12 +360,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
             responsive: true,
             scrollX: true
         });;
-=======
-    <script>
-        $(document).ready(function() {
-            $('#questionTableOpen').DataTable();
-            $('#questionTableOption').DataTable();
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         });
 
         $(document).on('change', '.isActiveCheckbox', function() {
@@ -480,11 +447,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
         });
 
         toastr.options = {
-<<<<<<< HEAD
             "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
-=======
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         };
 
         <?php if (isset($_SESSION["toast_success"])) : ?>

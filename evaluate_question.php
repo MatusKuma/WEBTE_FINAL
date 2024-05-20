@@ -1,9 +1,5 @@
 <?php
 session_start();
-<<<<<<< HEAD
-
-=======
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 include "../.configFinal.php"; // Zabezpečte správne pripojenie k databáze
 
 $code = $_GET['code'] ?? '';
@@ -97,7 +93,6 @@ if ($questionType === 'options') {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Question Evaluation</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -105,11 +100,6 @@ if ($questionType === 'options') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-=======
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     <style>
         .correct-answer {
             color: green;
@@ -128,7 +118,6 @@ if ($questionType === 'options') {
             margin: 5px;
             white-space: nowrap;
         }
-<<<<<<< HEAD
         .hidden {
             display: none;
         }
@@ -301,13 +290,10 @@ if ($questionType === 'options') {
             --bs-table-bg: #e0cee0;
         }
 
-=======
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
     </style>
 </head>
 
 <body>
-<<<<<<< HEAD
 <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">WEBTE FINAL</a>
@@ -362,45 +348,6 @@ if ($questionType === 'options') {
         <?php else : ?>
             <div id="wordcloud" class="word-cloud"></div>
             <script>
-=======
-    <div class="navigation_bar">
-        <div class="navbar">
-            <a href="find_question.php">Find question</a>
-            <a href="logged_in.php">Home</a>
-            <?php if (isset($_SESSION["username"])) : ?>
-                <a href="logout.php">Log out</a>
-                <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <div class="main-wrapper">
-        <h1><?php echo "Question Code: " . htmlspecialchars($questionCode); ?></h1>
-        <h1><?php echo htmlspecialchars($questionTitle); ?></h1>
-
-        <?php if ($questionType === 'open') : ?>
-            <?php if ($questionEvalType === 'list') : ?>
-                <h2>Answers Statistics</h2>
-                <table id="answerTable" class="display">
-                    <thead>
-                        <tr>
-                            <th>Answer</th>
-                            <th>Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($answerCounts as $row) : ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['answer']); ?></td>
-                                <td><?php echo $row['count']; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else : ?>
-                <div id="wordcloud" class="word-cloud"></div>
-                <script>
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
                     var answers = <?php echo json_encode($answerCounts); ?>;
                     var container = document.getElementById('wordcloud');
                     var maxCount = Math.max.apply(Math, answers.map(function(o) {
@@ -414,7 +361,6 @@ if ($questionType === 'options') {
                         span.style.fontSize = size + 'px';
                         container.appendChild(span);
                     });
-<<<<<<< HEAD
             </script>
         <?php endif; ?>
         <h2>Your Answer</h2>
@@ -460,51 +406,6 @@ if ($questionType === 'options') {
         // toastr nastavenia
         toastr.options = {
             "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
-=======
-                </script>
-            <?php endif; ?>
-            <h2>Your Answer</h2>
-            <p class="user-answer"><?php echo htmlspecialchars($userAnswer); ?></p>
-        <?php else : ?>
-            <h2>Answer Statistics</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Option</th>
-                        <th>Answer</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($i = 1; $i <= 4; $i++) : ?>
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td class="<?php echo in_array($i, $correctAnswers) ? 'correct-answer' : 'incorrect-answer'; ?>">
-                                <?php echo htmlspecialchars($question["option_$i"]); ?>
-                            </td>
-                            <td><?php echo $optionCounts[$i - 1] ?? 0; ?></td>
-                        </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
-            <h2>Your Answer</h2>
-            <ul class="user-answer">
-                <?php foreach ($userAnswerArray as $answer) : ?>
-                    <li class="<?php echo in_array($answer, $correctAnswers) ? 'correct-answer' : 'incorrect-answer'; ?>">
-                        <?php echo htmlspecialchars($question["option_$answer"]); ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script>
-        // toastr nastavenia
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         };
 
         <?php if (isset($_SESSION["toast_success"])) : ?>

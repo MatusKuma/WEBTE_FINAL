@@ -46,12 +46,6 @@ if (!$user) {
 $username = $user['username'];
 $isAdmin = $user['isAdmin'];
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +56,6 @@ $isAdmin = $user['isAdmin'];
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Edit User</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -265,36 +258,4 @@ $isAdmin = $user['isAdmin'];
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
  
-=======
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <div class="navigation_bar">
-        <div class="navbar">
-            <a href="add_question_admin.php">Add question</a>
-            <a href="add_user.php">Add User</a>
-            <a href="admin.php">Home</a>
-            <a href="logout.php">Log out</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-        </div>
-    </div>
-    <h1>Edit User</h1>
-    <form id="myForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username" value="<?php echo htmlspecialchars($username); ?>" required>
-        </div>
-        <div>
-            <label>Is Admin:</label>
-            <input type="checkbox" name="isAdmin" <?php echo $isAdmin ? 'checked' : ''; ?>>
-        </div>
-        <div>
-            <input type="submit" value="Save Changes">
-        </div>
-    </form>
-</body>
-
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 </html>

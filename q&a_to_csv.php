@@ -1,9 +1,5 @@
 <?php
 session_start();
-<<<<<<< HEAD
-=======
-
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false) {
     header("Location: index.php");
     exit;
@@ -209,4 +205,3 @@ try {
 } catch (PDOException $e) {
     echo "Connection error: " . $e->getMessage();
 }
-?>

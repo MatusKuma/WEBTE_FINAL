@@ -20,7 +20,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -213,91 +212,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
         // toastr nastavenia
         toastr.options = {
             "positionClass": "toast-bottom-right", // tu sa meni pozicia toastr
-=======
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-</head>
-
-<body>
-    <div class="navigation_bar">
-        <div class="navbar">
-            <a href="find_question.php">Find question</a>
-            <a href="add_question_user.php">Add question</a>
-            <a href=<?php echo "view_questions_user.php?user_id=" . $_SESSION["user_id"] ?>>My questions</a>
-            <a href="q&a_to_csv.php">Export Q&A</a>
-            <a href="manual_to_pdf.php">Export Manual</a>
-            <a href="logout.php">Log out</a>
-            <a href=<?php echo "change_password.php?user_id=" . $_SESSION["user_id"] ?>>Change Password</a>
-            <h2><?php echo "Logged in: " . $_SESSION["username"]; ?></h2>
-        </div>
-    </div>
-    <div id="manual" class="manual">
-        <h2>Neprihlásený používateľ</h2>
-        <ul>
-            <li>Sa dokáže registrovať sa a prihlásiť do systému po vykliknutí daného linku v navigácií</li>
-            <li>Vie vyhladať otázku 3 spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
-                5-miestneho kódu</li>
-            <li>Vie exportovať príručku do PDF</li>
-        </ul>
-        <h2>Prihlásený používateľ</h2>
-        <ul>
-            <li>Vie vyhladať otázku 3 spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
-                5-miestneho kódu</li>
-            <li>Dokáže pridať 2 typy otázok:
-                <ul>
-                    <li>Otázka s výberom odpovedí, vie zadať 4 rôzne možnosti a označiť, ktoré z nich sú správne
-                    </li>
-                    <li>Otvorená otázka, vie zadať aký typ vyhodnocovania bude otázka obsahovať</li>
-                </ul>
-            </li>
-            <li>Vie si zobraziť všetky vlastné otázky a vie nad nimi robiť tieto operácie:
-                <ul>
-                    <li>Editácia</li>
-                    <li>Duplikovanie</li>
-                    <li>Vymazanie</li>
-                    <li>Ukončiť hlasovanie</li>
-                </ul>
-            </li>
-            <li>Vie si exportovať vlastné otázky do CSV súboru</li>
-            <li>Vie exportovať príručku do PDF</li>
-            <li>Vie si zmeniť heslo</li>
-            <li>Odhlásiť sa</li>
-        </ul>
-        <h2>Admin</h2>
-        <ul>
-            <li>Vie vyhladať otázku 3 spôsobmi a to naskenovaním QR kódu, vyhľadaním cez URL alebo zadaním
-                5-miestneho kódu</li>
-            <li>Dokáže špecifikovať v koho mene vytvára otázku</li>
-            <li>Dokáže pridať 2 typy otázok:
-                <ul>
-                    <li>Otázka s výberom odpovedí, vie zadať 4 rôzne možnosti a označiť, ktoré z nich sú správne
-                    </li>
-                    <li>Otvorená otázka, vie zadať aký typ vyhodnocovania bude otázka obsahovať</li>
-                </ul>
-            </li>
-            <li>Vie si zobraziť všetkých používateľov a robiť nad nimi tieto operácie:
-                <ul>
-                    <li>Zobrazenie všetkých otázok daného používateľa</li>
-                    <li>Editácia daného používateľa</li>
-                    <li>Vymazanie daného používateľa</li>
-                    <li>Zmena hesla danému používateľovi</li>
-                    <li>Zmeniť status na admina danému používateľovi</li>
-                </ul>
-            </li>
-            <li>Vie pridávať užívateľov</li>
-            <li>Vie exportovať príručku do PDF</li>
-            <li>Vie si exportovať všetky otázky všetkých používateľov do CSV súboru</li>
-            <li>Odhlásiť sa</li>
-        </ul>
-    </div>
-    <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script>
-        // toastr nastavenia
-        toastr.options = {
-            "positionClass": "toast-top-right", // tu sa meni pozicia toastr
->>>>>>> 8ef626f8838a4c03cda942bbe2d69551e0b9f6a8
         };
 
         <?php if (isset($_SESSION["toast_success"])) : ?>
